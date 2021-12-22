@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rock 3D">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Yuji Hentaigana Akebono">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Moo Lah Lah">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto Mono">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="img/todo.png">
+    <script src="main.js" defer></script>
     <title>Todo List</title>
 </head>
 <body>
     <div id="content">
-        <script src="main.js"></script>
+        
 
         <div id="top">
-            <img src="img/list.png" alt="" id="list-ico"> <h1>Todo List</h1>
+            <img src="img/list.png" alt="" id="list-ico"> <h1>To-Do List</h1>
 
         </div>
 
@@ -26,10 +30,10 @@
                 <h2>Projects:</h2>
 
                 <div id="projects">
-                    <button class="button-project"><img src="img/project.png" alt="">aa <img class="del-project" src="img/x.png" alt=""></button>
+                    <button class="button-project"><img src="img/project.png" alt="">aa <img title="Delete" class="del-project" src="img/x.png" alt=""></button>
                 </div>
 
-                <div id="project-input">
+                <!-- <div id="project-input">
                     <input type="text" id="project-name-input">
                     <div id="input-buttons">
                         <button id="add-button" class="input-button">Add</button>
@@ -37,14 +41,68 @@
 
                     </div>
 
-                </div>
+                </div> -->
 
                 <button class="nav-buttons" id="add-project"><img src="img/add.png" alt="">Add Project</button>
 
             </div>
 
-            <div id="list">
+            <div id="main-div">
+                <div id="list">
 
+                    <div id="list-head">
+                        <span>Home</span>
+                        <div id="due-date"><span>Due Date</span><img id="arrow-sort" src="img/downarrow.png" alt=""></div>
+                    </div>
+
+                    <div class="task">
+                        <div class="task-left">
+                            <input type="checkbox">
+                            <span>Cardio</span>
+                            <div class="delete-edit-task">
+                                <img src="img/edit.png" alt="">
+                                <img src="img/x.png" alt="">
+                            </div>
+                        </div>
+
+                        <div class="task-right">
+                            <span>9/12/2022</span>
+                        </div>
+
+                    </div>
+                    <!-- <div class="edit-task">
+                        <textarea class="task-title-textarea" placeholder="Title:">Leg Day</textarea>
+                        <textarea  class="task-description" placeholder="Details:"></textarea>
+                        <label>Due Date:</label>
+                        <div class="date-and-project">
+                            <input type="date" class="date-set">
+                            <input placeholder="Project Name" type="text" class="set-project-name">
+                            <img src="img/accept.png" title="Accept">
+                            <img src="img/cancel.png" title="Cancel">
+                        </div>
+                        
+                       
+
+                    </div> -->
+
+
+
+                    <div class="task">
+                        <div class="task-left">
+                            <input type="checkbox">
+                            <span>Wash Dishes</span>
+                            <div class="delete-edit-task">
+                                <img src="img/edit.png" alt="">
+                                <img src="img/x.png" alt="">
+                            </div>
+                        </div>
+
+                        <div class="task-right">
+                            <span>15/15/2022</span>
+                        </div>
+
+                    </div>
+                </div>
 
             </div>
 
