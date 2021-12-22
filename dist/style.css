@@ -1,10 +1,6 @@
-
-
-
 body {
     height: 100vh;
     margin: 0px;
-    
 }
 
 #content {
@@ -18,10 +14,123 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: azure;
+    background-color: #f0ffff;
+}
+
+#middle {
+   display: flex;
+    
+    
+}
+
+#side-bar {
+    min-width: 300px;
+    height: 100vh;
+    background-color: #FFF0F0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 10px;
 }
 
 #list-ico {
     height: 32px;
     margin-left: 30px;
+}
+
+.nav-buttons, .button-project { 
+    width: 250px;
+    height: 40px;
+    border: none;
+    background-color: #FFF0F0;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    font-family: "Yuji Hentaigana Akebono";
+    gap: 10px;
+
+}
+
+.del-project {
+    margin-left: auto;
+    padding-right: 5px;
+    display: none;
+}
+
+.button-project:hover .del-project {
+    display: block;
+}
+
+#project-name-input {
+    border-radius: 5px;
+    width: 188px;
+    padding: 10px;
+    border: 1px solid #aaa;
+    outline: none;
+}
+
+#input-buttons {
+    width: 210px;
+    display: flex;
+    gap: 10px;
+
+}
+
+.input-button {
+    width: 100px;
+    height: 37px;
+    border-radius: 5px;
+    border: none;
+}
+
+#add-button {
+    background-color: #aaffaa;
+    border: 1px solid #99dd99;
+    font-weight: bold;
+}
+
+#add-button:hover {
+    background-color: #91E691;
+}
+
+#cancel-button {
+    background-color: #ffbebe;
+    border: 1px solid #eeadad;
+    font-weight: bold;
+}
+
+#cancel-button:hover {
+    background-color: #E6A5A5;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#project-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-buttons:hover, .button-project:hover {
+    background-color: #E6D7D7;
+    border-radius: 3px;
+}
+
+
+
+h2 {
+    align-self: flex-start;
+    font-family: "Rock 3D";
+    padding-left: 30px;
+    margin-bottom: 0px;
+}
+
+#list {
+    background-color: #F8FFF0;
+    width: 100%;
 }
