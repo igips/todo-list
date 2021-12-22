@@ -1,0 +1,27 @@
+
+
+
+body {
+    height: 100vh;
+    margin: 0px;
+    
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+
+}
+
+#top {
+    font-family: "Rock 3D";
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: azure;
+}
+
+#list-ico {
+    height: 32px;
+    margin-left: 30px;
+}
