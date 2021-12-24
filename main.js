@@ -25,7 +25,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getDataFromTaskFormAndCreateTask": () => (/* binding */ getDataFromTaskFormAndCreateTask),
 /* harmony export */   "validateForm": () => (/* binding */ validateForm),
 /* harmony export */   "removeTask": () => (/* binding */ removeTask),
-/* harmony export */   "editTask": () => (/* binding */ editTask)
+/* harmony export */   "editTask": () => (/* binding */ editTask),
+/* harmony export */   "displayTasksInProject": () => (/* binding */ displayTasksInProject),
+/* harmony export */   "removeAllTasks": () => (/* binding */ removeAllTasks)
 /* harmony export */ });
 /* harmony import */ var _eventlis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
@@ -155,6 +157,13 @@ function removeProject(id) {
         }
     }
 
+}
+
+function removeAllTasks() {
+    let task = document.getElementsByClassName("task");
+    while(task[0]) {
+        task[0].parentNode.removeChild(task[0]);
+    }
 }
 
 function removeTask(id) {
@@ -416,6 +425,7 @@ function getDataFromTaskFormAndCreateTask() {
 
 function displayTasks() {
     
+    
     _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.forEach((task) => {
         const children = document.querySelectorAll("div.task");
         let check = false;
@@ -428,9 +438,32 @@ function displayTasks() {
             }
         }
 
+
         if(check == false) {
             createTaskVisual(task.name, task.date, task.id);
             
+        }
+        
+    });
+}
+
+function displayTasksInProject(projectName) {
+    
+    _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.forEach((task) => {
+        const children = document.querySelectorAll("div.task");
+        let check = false;
+       
+        
+        for(let i = 0; i < children.length; i++) {
+            let aa = children[i].getAttribute("id");
+            if(aa == task.id) {
+                check = true;
+            }
+        }
+        
+        
+        if(check == false && projectName.toLowerCase() == task.project.toLowerCase()) {
+            createTaskVisual(task.name, task.date, task.id);
         }
         
     });
@@ -576,6 +609,10 @@ function randomNumber() {
 function addEventListenerToProjectButton(button) {
     button.addEventListener("click", () => {
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.changeListName)(button.textContent);
+        (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
+        
+        (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasksInProject)(button.textContent.replace(/\s+/g, ''));
+
     });
 }
 
