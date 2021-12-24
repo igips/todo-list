@@ -1,11 +1,17 @@
-import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton } from "./eventlis";
-import { projects } from "./projectsandtasks";
+import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton } from "./eventlis";
+import { projects, Task, tasks } from "./projectsandtasks";
 
 
 function getNavButtons() {
     const buttons = document.querySelectorAll("button.nav-buttons");
 
     return buttons;
+}
+
+function getElementById(id) {
+    const ele = document.getElementById(id);
+
+    return ele;
 }
 
 
@@ -105,6 +111,9 @@ function getRemoveProjectButton(id) {
 
 function removeProject(id) {
     let ele = document.getElementById(id);
+    if(ele.textContent == document.getElementById("list-name").textContent) {
+        changeListName("Home");
+    }
     ele.parentNode.removeChild(ele);
 
 
@@ -115,16 +124,307 @@ function removeProject(id) {
         }
     }
 
+}
+
+function removeTask(id) {
+    let ele = document.getElementById(id);
+    ele.parentNode.removeChild(ele);
+
+    for(let i = 0; i < tasks.length; i++) {
+        if(tasks[i].id == id) {
+            tasks.splice(i, 1);
+            break;
+        }
+    }
+}
+
+function returnTaskById(id) {
+   
+        for(let i = 0; i < tasks.length; i++) {
+            if(tasks[i].id == id) {
+                return tasks[i];
+            }
+        }
+    
+}
+
+function editTask(id) {
+    let ele = document.getElementById(id);
+    let taskFromList = returnTaskById(id);
+    document.getElementById("add-task").style.visibility = "hidden";
+    ele.textContent = "";
+
+    const container = document.createElement("div");
+    container.setAttribute("id", "divForAddTaskForm");
+    const form = document.createElement("form");
+    form.style.borderBottom = "none";
+    form.setAttribute("class", "edit-task");
+    form.setAttribute("onsubmit", "return false");
+    
+    const textareaTitle = document.createElement("textarea");
+    textareaTitle.setAttribute("class", "task-title-textarea");
+    textareaTitle.setAttribute("id", "titleOfTask");
+    textareaTitle.setAttribute("required", true);
+    textareaTitle.value = taskFromList.name;
+    const labelForTitle = document.createElement("label");
+    labelForTitle.textContent = "Title:";
+    labelForTitle.style.marginTop = "0px";
+    form.appendChild(labelForTitle);
+    form.appendChild(textareaTitle);
+
+    const textAreaDescription = document.createElement("textarea");
+    textAreaDescription.setAttribute("class", "task-description");
+    textAreaDescription.setAttribute("id", "detailsOfTask");
+    textAreaDescription.setAttribute("required", true);
+    textAreaDescription.value = taskFromList.description;
+    const labelForDes = document.createElement("label");
+    labelForDes.textContent = "Description:";
+    labelForDes.style.marginTop = "0px";
+    form.appendChild(labelForDes);
+    form.appendChild(textAreaDescription);
+
+    const label = document.createElement("label");
+    label.style.marginTop = "0px";
+    label.textContent = "Due Date:";
+    form.appendChild(label);
+
+    const secondContainer = document.createElement("div");
+    secondContainer.setAttribute("class", "date-and-project");
+
+    const inputDate = document.createElement("input");
+    inputDate.setAttribute("type", "date");
+    inputDate.setAttribute("id", "datePicker");
+    inputDate.setAttribute("class", "date-set");
+    inputDate.setAttribute("required", true);
+    inputDate.value = taskFromList.date;
+    secondContainer.appendChild(inputDate);
+
+    const inputProjectName = document.createElement("input");
+    inputProjectName.setAttribute("placeholder", "Project Name");
+    inputProjectName.setAttribute("type", "text");
+    inputProjectName.setAttribute("id", "projectNameValue");
+    inputProjectName.setAttribute("class", "set-project-name");
+    inputProjectName.value = taskFromList.project;
+    secondContainer.appendChild(inputProjectName);
+
+    const imgAccept = document.createElement("button");
+    imgAccept.setAttribute("id", "acceptButton");
+    imgAccept.innerHTML = '<img src="img/accept.png" title="Accept"></img>';
+   
+    secondContainer.appendChild(imgAccept);
+
+
+    const imgCancel = document.createElement("img");
+    imgCancel.setAttribute("id", "cancelAddTaskButton");
+    imgCancel.setAttribute("src", "img/cancel.png");
+    imgCancel.setAttribute("title", "Cancel");
+    secondContainer.appendChild(imgCancel);
+
+    form.appendChild(secondContainer);
+    container.appendChild(form);
+
+    ele.appendChild(container);
+
+    imgAccept.addEventListener("click",() => {
+        taskFromList.name = textareaTitle.value;
+        taskFromList.description = textAreaDescription.value;
+        taskFromList.date = inputDate.value;
+        taskFromList.project = inputProjectName.value;
+        ele.parentNode.removeChild(ele);
+        displayTasks();
+        
+
+    });
+
+    imgCancel.addEventListener("click", () => {
+        ele.parentNode.removeChild(ele);
+        displayTasks();
+    });
     
 
+}
+
+function createTaskEditor() {
+    const container = document.createElement("div");
+    container.setAttribute("id", "divForAddTaskForm");
+    const form = document.createElement("form");
+    form.setAttribute("class", "edit-task");
+    form.setAttribute("onsubmit", "return false");
 
 
+    const textareaTitle = document.createElement("textarea");
+    textareaTitle.setAttribute("class", "task-title-textarea");
+    textareaTitle.setAttribute("id", "titleOfTask");
+    textareaTitle.setAttribute("placeholder", "Title:");
+    textareaTitle.setAttribute("required", true);
+    form.appendChild(textareaTitle);
+
+    const textAreaDescription = document.createElement("textarea");
+    textAreaDescription.setAttribute("class", "task-description");
+    textAreaDescription.setAttribute("placeholder", "Details:");
+    textAreaDescription.setAttribute("id", "detailsOfTask");
+    textAreaDescription.setAttribute("required", true);
+    form.appendChild(textAreaDescription);
+
+    const label = document.createElement("label");
+    label.textContent = "Due Date:";
+    form.appendChild(label);
+
+    const secondContainer = document.createElement("div");
+    secondContainer.setAttribute("class", "date-and-project");
+
+    const inputDate = document.createElement("input");
+    inputDate.setAttribute("type", "date");
+    inputDate.setAttribute("id", "datePicker");
+    inputDate.setAttribute("class", "date-set");
+    inputDate.setAttribute("required", true);
+    secondContainer.appendChild(inputDate);
+
+    const inputProjectName = document.createElement("input");
+    inputProjectName.setAttribute("placeholder", "Project Name");
+    inputProjectName.setAttribute("type", "text");
+    inputProjectName.setAttribute("id", "projectNameValue");
+    inputProjectName.setAttribute("class", "set-project-name");
+    secondContainer.appendChild(inputProjectName);
+
+    const imgAccept = document.createElement("button");
+    imgAccept.setAttribute("id", "acceptButton");
+    imgAccept.innerHTML = '<img src="img/accept.png" title="Accept"></img>';
+    secondContainer.appendChild(imgAccept);
+
+    
+    const imgCancel = document.createElement("img");
+    imgCancel.setAttribute("id", "cancelAddTaskButton");
+    imgCancel.setAttribute("src", "img/cancel.png");
+    imgCancel.setAttribute("title", "Cancel");
+    secondContainer.appendChild(imgCancel);
+
+    form.appendChild(secondContainer);
+    container.appendChild(form);
+    
+
+    return container;
+    
+}
+
+function createTaskVisual(title, date, id) {
+    const divTask = document.createElement("div");
+    divTask.setAttribute("class", "task");
+    divTask.setAttribute("id", id);
+
+    const divLeft = document.createElement("div");
+    divLeft.setAttribute("class", "task-left");
+
+    const checkBox = document.createElement("input");
+    checkBox.setAttribute("type", "checkbox");
+    checkBox.setAttribute("data-id", id+"Ch");
+    divLeft.appendChild(checkBox);
+
+    const text = document.createElement("span");
+    text.textContent = title;
+    divLeft.appendChild(text);
+
+    const deleteEdit = document.createElement("div");
+    deleteEdit.setAttribute("class", "delete-edit-task");
+
+    const imgEdit = document.createElement("img");
+    imgEdit.setAttribute("src", "img/edit.png");
+    imgEdit.setAttribute("data-id", id);
+    addEventListenerToEditTaskButton(imgEdit, id);
+    deleteEdit.appendChild(imgEdit);
+
+    const imgDel = document.createElement("img");
+    imgDel.setAttribute("src", "img/x.png");
+    imgDel.setAttribute("data-id", id+"D");
+    addEventListenerToRemoveTaskButton(imgDel, id);
+    deleteEdit.appendChild(imgDel);
+    divLeft.appendChild(deleteEdit);
+
+    divTask.appendChild(divLeft);
+
+    const divRight = document.createElement("div");
+
+    const dateText = document.createElement("span");
+    dateText.textContent = date;
+
+    divRight.appendChild(dateText);
+    divTask.appendChild(divRight);
+
+    if(document.getElementById("divForAddTaskForm") != null) {
+        document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
+    }
+
+    
+    document.getElementById("tasks").appendChild(divTask);
+    document.getElementById("add-task").style.visibility = "visible";
+}
+
+function clearForm() {
+    document.getElementById("titleOfTask").value = "";
+    document.getElementById("detailsOfTask").value = "";
+    document.getElementById("datePicker").value = "";
+    document.getElementById("projectNameValue").value = "";
+}
+
+function getDataFromTaskFormAndCreateTask() {
+    const title = document.getElementById("titleOfTask").value;
+    const details = document.getElementById("detailsOfTask").value;
+    const date = document.getElementById("datePicker").value;
+    const project = document.getElementById("projectNameValue").value;
+    
+
+    const task = Task(title, details, date, project, false, setIdForTask());
+    tasks.push(task);
+    clearForm();
+    displayTasks();
+   
+
+    
+
+}
+
+function displayTasks() {
+    
+    tasks.forEach((task) => {
+        const children = document.querySelectorAll("div.task");
+        let check = false;
+       
+
+        for(let i = 0; i < children.length; i++) {
+            let aa = children[i].getAttribute("id");
+            if(aa == task.id) {
+                check = true;
+            }
+        }
+
+        if(check == false) {
+            createTaskVisual(task.name, task.date, task.id);
+            
+        }
+        
+    });
+}
+
+
+function validateForm() {
+    const title = document.getElementById("titleOfTask").value;
+    const details = document.getElementById("detailsOfTask").value;
+    const data = document.getElementById("datePicker").value;
+
+    if(title != "" && details != "" && data != "") {
+        return true;
+    }
+
+    return false;
 }
 
 
 
 
 
+
+
 export {getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, createAddProjectButton, getAddButton,
-    getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject
+    getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject, getElementById,createTaskEditor,getDataFromTaskFormAndCreateTask,validateForm, removeTask,
+    editTask
 };

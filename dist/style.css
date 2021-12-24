@@ -54,6 +54,15 @@ body {
 
 }
 
+#acceptButton {
+    border: none;
+    background-color: #F8FFF0;
+    padding: 0px;
+    height: 16px;
+}
+
+
+
 .del-project {
     margin-left: auto;
     padding-right: 5px;

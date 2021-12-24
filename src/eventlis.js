@@ -1,5 +1,5 @@
-import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject} from "./domMani";
-import { Project, projects } from "./projectsandtasks";
+import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask} from "./domMani";
+import { Project, projects, tasks } from "./projectsandtasks";
 
 function tabSwitchEvent() {
     const buttons = getNavButtons();
@@ -70,6 +70,21 @@ function setIdForProject() {
     }
 
 }
+
+function setIdForTask() {
+    let number = randomNumber();
+    if(tasks.length < 1) {
+        return number + "t";
+    } else {
+        for (let i = 0; i < tasks.length; i++) {
+            if(tasks[i].id == number + "t") {
+                setIdForTask();
+            } else {
+                return number + "t";
+            }
+        }
+    }
+}
     
 
 function randomNumber() {
@@ -88,9 +103,63 @@ function addEventListenerToDeleteProjectButton(ele, id) {
         event.stopPropagation();
         removeProject(id);
 
-        
     });
 }
 
+function addEventListenerToEditTaskButton(ele, id) {
+    ele.addEventListener("click", () => {
+        event.stopPropagation();
+        editTask(id);
+    });
+}
 
-export {tabSwitchEvent, addProjectEvent, addProjectToList, cancelAddingProject, addEventListenerToProjectButton, addEventListenerToDeleteProjectButton};
+function addEventListenerToRemoveTaskButton(ele, id) {
+    ele.addEventListener("click", () => {
+        event.stopPropagation();
+        removeTask(id);
+    });
+}
+
+function addTaskButton() {
+    const button = getElementById("add-task");
+
+
+    button.addEventListener("click", () => {
+        const divTaskEditor = createTaskEditor();
+        document.getElementById("tasks").appendChild(divTaskEditor);
+        document.getElementById("add-task").style.visibility = "hidden";
+        cancelAddTaskButton();
+        createTaskEvent();
+        
+
+    });
+}
+
+function cancelAddTaskButton() {
+    const button = getElementById("cancelAddTaskButton"); 
+
+    button.addEventListener("click", () => {
+        event.stopPropagation();
+        const div = getElementById("divForAddTaskForm");
+        div.parentNode.removeChild(div);
+        document.getElementById("add-task").style.visibility = "visible";
+    });
+}
+
+function createTaskEvent() {
+    const button = getElementById("acceptButton");
+
+    button.addEventListener("click", () => {
+        event.stopPropagation();
+        if(validateForm() == true) {
+            getDataFromTaskFormAndCreateTask();
+        }
+        
+        
+    });
+
+}
+
+
+export {tabSwitchEvent, addProjectEvent, addProjectToList, cancelAddingProject, addEventListenerToProjectButton, addEventListenerToDeleteProjectButton, addTaskButton, cancelAddTaskButton, randomNumber, setIdForProject, setIdForTask, addEventListenerToEditTaskButton,
+addEventListenerToRemoveTaskButton};
