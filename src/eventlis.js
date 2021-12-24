@@ -1,4 +1,4 @@
-import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask} from "./domMani";
+import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks} from "./domMani";
 import { Project, projects, tasks } from "./projectsandtasks";
 
 function tabSwitchEvent() {
@@ -95,6 +95,10 @@ function randomNumber() {
 function addEventListenerToProjectButton(button) {
     button.addEventListener("click", () => {
         changeListName(button.textContent);
+        removeAllTasks();
+        
+        displayTasksInProject(button.textContent.replace(/\s+/g, ''));
+
     });
 }
 

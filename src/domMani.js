@@ -126,6 +126,13 @@ function removeProject(id) {
 
 }
 
+function removeAllTasks() {
+    let task = document.getElementsByClassName("task");
+    while(task[0]) {
+        task[0].parentNode.removeChild(task[0]);
+    }
+}
+
 function removeTask(id) {
     let ele = document.getElementById(id);
     ele.parentNode.removeChild(ele);
@@ -385,6 +392,7 @@ function getDataFromTaskFormAndCreateTask() {
 
 function displayTasks() {
     
+    
     tasks.forEach((task) => {
         const children = document.querySelectorAll("div.task");
         let check = false;
@@ -397,9 +405,32 @@ function displayTasks() {
             }
         }
 
+
         if(check == false) {
             createTaskVisual(task.name, task.date, task.id);
             
+        }
+        
+    });
+}
+
+function displayTasksInProject(projectName) {
+    
+    tasks.forEach((task) => {
+        const children = document.querySelectorAll("div.task");
+        let check = false;
+       
+        
+        for(let i = 0; i < children.length; i++) {
+            let aa = children[i].getAttribute("id");
+            if(aa == task.id) {
+                check = true;
+            }
+        }
+        
+        
+        if(check == false && projectName.toLowerCase() == task.project.toLowerCase()) {
+            createTaskVisual(task.name, task.date, task.id);
         }
         
     });
@@ -426,5 +457,5 @@ function validateForm() {
 
 export {getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, createAddProjectButton, getAddButton,
     getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject, getElementById,createTaskEditor,getDataFromTaskFormAndCreateTask,validateForm, removeTask,
-    editTask
+    editTask, displayTasksInProject, removeAllTasks
 };
