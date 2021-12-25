@@ -145,10 +145,8 @@ function getRemoveProjectButton(id) {
 
 function removeProject(id) {
     let ele = document.getElementById(id);
-    if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent) {
-        changeListName("Home");
-        document.getElementById("tasks").textContent = "";
-        displayTasks();
+    if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent.replace(/\s+/g, '')) {
+        document.getElementById("home").click();
     } else if (document.getElementById("list-name").textContent == "Home") {
         document.getElementById("tasks").textContent = "";
         displayTasks();
@@ -215,6 +213,7 @@ function editTask(id) {
     const textareaTitle = document.createElement("textarea");
     textareaTitle.setAttribute("class", "task-title-textarea");
     textareaTitle.setAttribute("id", "titleOfTask");
+    textareaTitle.setAttribute("placeholder", "...");
     textareaTitle.setAttribute("required", true);
     textareaTitle.value = taskFromList.name;
     const labelForTitle = document.createElement("label");
@@ -226,7 +225,7 @@ function editTask(id) {
     const textAreaDescription = document.createElement("textarea");
     textAreaDescription.setAttribute("class", "task-description");
     textAreaDescription.setAttribute("id", "detailsOfTask");
-    textAreaDescription.setAttribute("required", true);
+    //textAreaDescription.setAttribute("required", true);
     textAreaDescription.value = taskFromList.description;
     const labelForDes = document.createElement("label");
     labelForDes.textContent = "Description:";
@@ -246,7 +245,7 @@ function editTask(id) {
     inputDate.setAttribute("type", "date");
     inputDate.setAttribute("id", "datePicker");
     inputDate.setAttribute("class", "date-set");
-    inputDate.setAttribute("required", true);
+    //inputDate.setAttribute("required", true);
     inputDate.value = taskFromList.date;
     secondContainer.appendChild(inputDate);
 
@@ -277,11 +276,15 @@ function editTask(id) {
     ele.appendChild(container);
 
     imgAccept.addEventListener("click",() => {
+        event.stopPropagation();
         taskFromList.name = textareaTitle.value;
         taskFromList.description = textAreaDescription.value;
         taskFromList.date = inputDate.value;
         taskFromList.project = inputProjectName.value;
-        completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
+        if(validateForm() == true) {
+            completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
+        }
+        
     });
 
     imgCancel.addEventListener("click", () => {
@@ -317,7 +320,7 @@ function createTaskEditor() {
     textAreaDescription.setAttribute("class", "task-description");
     textAreaDescription.setAttribute("placeholder", "Details:");
     textAreaDescription.setAttribute("id", "detailsOfTask");
-    textAreaDescription.setAttribute("required", true);
+    //textAreaDescription.setAttribute("required", true);
     form.appendChild(textAreaDescription);
 
     const label = document.createElement("label");
@@ -331,7 +334,7 @@ function createTaskEditor() {
     inputDate.setAttribute("type", "date");
     inputDate.setAttribute("id", "datePicker");
     inputDate.setAttribute("class", "date-set");
-    inputDate.setAttribute("required", true);
+   // inputDate.setAttribute("required", true);
     secondContainer.appendChild(inputDate);
 
 
@@ -438,8 +441,6 @@ function getDataFromTaskFormAndCreateTask() {
         project = document.getElementById("list-name").textContent.replace(/\s+/g, '');
     }
     
-    
-
     const task = (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.Task)(title, details, date, project, false, (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.setIdForTask)());
     _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.push(task);
     clearForm();
@@ -511,10 +512,8 @@ function displayTasksInProject(projectName) {
 
 function validateForm() {
     const title = document.getElementById("titleOfTask").value;
-    const details = document.getElementById("detailsOfTask").value;
-    const data = document.getElementById("datePicker").value;
 
-    if(title != "" && details != "" && data != "") {
+    if(title != "") {
         return true;
     }
 
@@ -599,6 +598,8 @@ function addProjectToList() {
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.hideProjectInput)();
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayProjects)();
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.createAddProjectButton)();
+
+        document.getElementById(project.id).click();
     });
 }
 
@@ -673,8 +674,12 @@ function addEventListenerToDeleteProjectButton(ele, id) {
                 _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.splice(i, 1);
             }
         }
+        
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeProject)(id);
-        document.getElementById("home").click();
+        if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent.replace(/\s+/g, '')) {
+            document.getElementById("home").click();
+        }
+        
         
         
 
