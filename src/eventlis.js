@@ -46,6 +46,8 @@ function addProjectToList() {
         hideProjectInput();
         displayProjects();
         createAddProjectButton();
+
+        document.getElementById(project.id).click();
     });
 }
 
@@ -120,8 +122,12 @@ function addEventListenerToDeleteProjectButton(ele, id) {
                 tasks.splice(i, 1);
             }
         }
+        
         removeProject(id);
-        document.getElementById("home").click();
+        if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent.replace(/\s+/g, '')) {
+            document.getElementById("home").click();
+        }
+        
         
         
 
