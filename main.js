@@ -27,7 +27,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "removeTask": () => (/* binding */ removeTask),
 /* harmony export */   "editTask": () => (/* binding */ editTask),
 /* harmony export */   "displayTasksInProject": () => (/* binding */ displayTasksInProject),
-/* harmony export */   "removeAllTasks": () => (/* binding */ removeAllTasks)
+/* harmony export */   "removeAllTasks": () => (/* binding */ removeAllTasks),
+/* harmony export */   "displayTasks": () => (/* binding */ displayTasks)
 /* harmony export */ });
 /* harmony import */ var _eventlis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
@@ -117,7 +118,7 @@ function displayProjects() {
         }
 
         if(check == false) {
-            const button = createProjectButton(project.title, project.id);
+            const button = createProjectButton(project.title.replace(/\s+/g, ''), project.id);
             (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToProjectButton)(button);
             projectList.appendChild(button);
             (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToDeleteProjectButton)(getRemoveProjectButton(project.id), project.id);
@@ -144,8 +145,13 @@ function getRemoveProjectButton(id) {
 
 function removeProject(id) {
     let ele = document.getElementById(id);
-    if(ele.textContent == document.getElementById("list-name").textContent) {
+    if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent) {
         changeListName("Home");
+        document.getElementById("tasks").textContent = "";
+        displayTasks();
+    } else if (document.getElementById("list-name").textContent == "Home") {
+        document.getElementById("tasks").textContent = "";
+        displayTasks();
     }
     ele.parentNode.removeChild(ele);
 
@@ -186,6 +192,11 @@ function returnTaskById(id) {
             }
         }
     
+}
+
+function createInnerHtmlForTask(id, title,date) {
+    let a = '<div class="task-left"><input type="checkbox" data-id="' + id +'Ch"><span>'+ title +'</span><div class="delete-edit-task"><img src="img/edit.png" data-id="'+id+'"><img src="img/x.png" data-id="'+id+'D"></div></div><div><span>'+date+'</span></div>';
+    return a;
 }
 
 function editTask(id) {
@@ -270,18 +281,21 @@ function editTask(id) {
         taskFromList.description = textAreaDescription.value;
         taskFromList.date = inputDate.value;
         taskFromList.project = inputProjectName.value;
-        ele.parentNode.removeChild(ele);
-        displayTasks();
-        
-
+        completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
     });
 
     imgCancel.addEventListener("click", () => {
-        ele.parentNode.removeChild(ele);
-        displayTasks();
+        completeEditingTask(id, taskFromList.name, taskFromList.date, ele);
     });
     
+   
+}
 
+function completeEditingTask(id, name, date, ele) {
+    ele.innerHTML = createInnerHtmlForTask(id, name, date);
+    (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToEditTaskButton)(document.querySelector("[data-id='"+id+"']"), id);
+    (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToRemoveTaskButton)(document.querySelector("[data-id='"+id+"D']"), id);
+    document.getElementById("add-task").style.visibility = "visible";
 }
 
 function createTaskEditor() {
@@ -416,7 +430,13 @@ function getDataFromTaskFormAndCreateTask() {
     const task = (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.Task)(title, details, date, project, false, (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.setIdForTask)());
     _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.push(task);
     clearForm();
-    displayTasks();
+    if(document.getElementById("list-name").textContent == "Home") {
+        displayTasks();
+    } else {
+        displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+    }
+
+    
    
 
     
@@ -442,7 +462,7 @@ function displayTasks() {
         if(check == false) {
             createTaskVisual(task.name, task.date, task.id);
             
-        }
+        } 
         
     });
 }
@@ -464,6 +484,12 @@ function displayTasksInProject(projectName) {
         
         if(check == false && projectName.toLowerCase() == task.project.toLowerCase()) {
             createTaskVisual(task.name, task.date, task.id);
+        } else {
+            if(document.getElementById("divForAddTaskForm") != null) {
+                document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
+            }
+            document.getElementById("add-task").style.visibility = "visible";
+
         }
         
     });
@@ -521,6 +547,15 @@ function tabSwitchEvent() {
     buttons.forEach((button) => {
         button.addEventListener("click", () => {
             (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.changeListName)(button.textContent);
+            if(document.getElementById("list-name").textContent == "Home") {
+                document.getElementById("tasks").textContent = "";
+                document.getElementById("add-task").style.visibility = "visible";
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
+            } else if (document.getElementById("list-name").textContent == "Today") {
+                document.getElementById("add-task").style.visibility = "hidden";
+            } else if (document.getElementById("list-name").textContent == "This Week") {
+                document.getElementById("add-task").style.visibility = "hidden";
+            }
         });
     });
 
@@ -609,8 +644,9 @@ function randomNumber() {
 function addEventListenerToProjectButton(button) {
     button.addEventListener("click", () => {
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.changeListName)(button.textContent);
+        document.getElementById("tasks").textContent = "";
+        document.getElementById("add-task").style.visibility = "visible";
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
-        
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasksInProject)(button.textContent.replace(/\s+/g, ''));
 
     });
@@ -619,7 +655,15 @@ function addEventListenerToProjectButton(button) {
 function addEventListenerToDeleteProjectButton(ele, id) {
     ele.addEventListener("click", () => {
         event.stopPropagation();
+        for(let i = 0; i < _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.length; i++) {
+            if(_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks[i].project == ele.parentNode.textContent.replace(/\s+/g, '')) {
+                _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.splice(i, 1);
+            }
+        }
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeProject)(id);
+        document.getElementById("home").click();
+        
+        
 
     });
 }
