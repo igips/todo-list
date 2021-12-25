@@ -334,12 +334,16 @@ function createTaskEditor() {
     inputDate.setAttribute("required", true);
     secondContainer.appendChild(inputDate);
 
-    const inputProjectName = document.createElement("input");
-    inputProjectName.setAttribute("placeholder", "Project Name");
-    inputProjectName.setAttribute("type", "text");
-    inputProjectName.setAttribute("id", "projectNameValue");
-    inputProjectName.setAttribute("class", "set-project-name");
-    secondContainer.appendChild(inputProjectName);
+
+    if(document.getElementById("list-name").textContent == "Home") {
+        const inputProjectName = document.createElement("input");
+        inputProjectName.setAttribute("placeholder", "Project Name");
+        inputProjectName.setAttribute("type", "text");
+        inputProjectName.setAttribute("id", "projectNameValue");
+        inputProjectName.setAttribute("class", "set-project-name");
+        secondContainer.appendChild(inputProjectName);
+    }
+    
 
     const imgAccept = document.createElement("button");
     imgAccept.setAttribute("id", "acceptButton");
@@ -417,14 +421,23 @@ function clearForm() {
     document.getElementById("titleOfTask").value = "";
     document.getElementById("detailsOfTask").value = "";
     document.getElementById("datePicker").value = "";
-    document.getElementById("projectNameValue").value = "";
+    if(document.getElementById("projectNameValue") != null) {
+        document.getElementById("projectNameValue").value = "";
+    }
+    
 }
 
 function getDataFromTaskFormAndCreateTask() {
     const title = document.getElementById("titleOfTask").value;
     const details = document.getElementById("detailsOfTask").value;
     const date = document.getElementById("datePicker").value;
-    const project = document.getElementById("projectNameValue").value;
+    let project = "";
+    if(document.getElementById("list-name").textContent == "Home") {
+        project = document.getElementById("projectNameValue").value;
+    } else if (document.getElementById("list-name").textContent != "Home") {
+        project = document.getElementById("list-name").textContent.replace(/\s+/g, '');
+    }
+    
     
 
     const task = (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.Task)(title, details, date, project, false, (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.setIdForTask)());
