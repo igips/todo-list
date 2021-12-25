@@ -84,7 +84,7 @@ function displayProjects() {
         }
 
         if(check == false) {
-            const button = createProjectButton(project.title, project.id);
+            const button = createProjectButton(project.title.replace(/\s+/g, ''), project.id);
             addEventListenerToProjectButton(button);
             projectList.appendChild(button);
             addEventListenerToDeleteProjectButton(getRemoveProjectButton(project.id), project.id);
@@ -111,8 +111,13 @@ function getRemoveProjectButton(id) {
 
 function removeProject(id) {
     let ele = document.getElementById(id);
-    if(ele.textContent == document.getElementById("list-name").textContent) {
+    if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent) {
         changeListName("Home");
+        document.getElementById("tasks").textContent = "";
+        displayTasks();
+    } else if (document.getElementById("list-name").textContent == "Home") {
+        document.getElementById("tasks").textContent = "";
+        displayTasks();
     }
     ele.parentNode.removeChild(ele);
 
@@ -153,6 +158,11 @@ function returnTaskById(id) {
             }
         }
     
+}
+
+function createInnerHtmlForTask(id, title,date) {
+    let a = '<div class="task-left"><input type="checkbox" data-id="' + id +'Ch"><span>'+ title +'</span><div class="delete-edit-task"><img src="img/edit.png" data-id="'+id+'"><img src="img/x.png" data-id="'+id+'D"></div></div><div><span>'+date+'</span></div>';
+    return a;
 }
 
 function editTask(id) {
@@ -237,18 +247,21 @@ function editTask(id) {
         taskFromList.description = textAreaDescription.value;
         taskFromList.date = inputDate.value;
         taskFromList.project = inputProjectName.value;
-        ele.parentNode.removeChild(ele);
-        displayTasks();
-        
-
+        completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
     });
 
     imgCancel.addEventListener("click", () => {
-        ele.parentNode.removeChild(ele);
-        displayTasks();
+        completeEditingTask(id, taskFromList.name, taskFromList.date, ele);
     });
     
+   
+}
 
+function completeEditingTask(id, name, date, ele) {
+    ele.innerHTML = createInnerHtmlForTask(id, name, date);
+    addEventListenerToEditTaskButton(document.querySelector("[data-id='"+id+"']"), id);
+    addEventListenerToRemoveTaskButton(document.querySelector("[data-id='"+id+"D']"), id);
+    document.getElementById("add-task").style.visibility = "visible";
 }
 
 function createTaskEditor() {
@@ -383,7 +396,13 @@ function getDataFromTaskFormAndCreateTask() {
     const task = Task(title, details, date, project, false, setIdForTask());
     tasks.push(task);
     clearForm();
-    displayTasks();
+    if(document.getElementById("list-name").textContent == "Home") {
+        displayTasks();
+    } else {
+        displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+    }
+
+    
    
 
     
@@ -409,7 +428,7 @@ function displayTasks() {
         if(check == false) {
             createTaskVisual(task.name, task.date, task.id);
             
-        }
+        } 
         
     });
 }
@@ -431,6 +450,12 @@ function displayTasksInProject(projectName) {
         
         if(check == false && projectName.toLowerCase() == task.project.toLowerCase()) {
             createTaskVisual(task.name, task.date, task.id);
+        } else {
+            if(document.getElementById("divForAddTaskForm") != null) {
+                document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
+            }
+            document.getElementById("add-task").style.visibility = "visible";
+
         }
         
     });
@@ -457,5 +482,5 @@ function validateForm() {
 
 export {getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, createAddProjectButton, getAddButton,
     getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject, getElementById,createTaskEditor,getDataFromTaskFormAndCreateTask,validateForm, removeTask,
-    editTask, displayTasksInProject, removeAllTasks
+    editTask, displayTasksInProject, removeAllTasks, displayTasks
 };

@@ -1,4 +1,4 @@
-import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks} from "./domMani";
+import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks, displayTasks} from "./domMani";
 import { Project, projects, tasks } from "./projectsandtasks";
 
 function tabSwitchEvent() {
@@ -7,6 +7,15 @@ function tabSwitchEvent() {
     buttons.forEach((button) => {
         button.addEventListener("click", () => {
             changeListName(button.textContent);
+            if(document.getElementById("list-name").textContent == "Home") {
+                document.getElementById("tasks").textContent = "";
+                document.getElementById("add-task").style.visibility = "visible";
+                displayTasks();
+            } else if (document.getElementById("list-name").textContent == "Today") {
+                document.getElementById("add-task").style.visibility = "hidden";
+            } else if (document.getElementById("list-name").textContent == "This Week") {
+                document.getElementById("add-task").style.visibility = "hidden";
+            }
         });
     });
 
@@ -95,8 +104,9 @@ function randomNumber() {
 function addEventListenerToProjectButton(button) {
     button.addEventListener("click", () => {
         changeListName(button.textContent);
+        document.getElementById("tasks").textContent = "";
+        document.getElementById("add-task").style.visibility = "visible";
         removeAllTasks();
-        
         displayTasksInProject(button.textContent.replace(/\s+/g, ''));
 
     });
@@ -105,7 +115,15 @@ function addEventListenerToProjectButton(button) {
 function addEventListenerToDeleteProjectButton(ele, id) {
     ele.addEventListener("click", () => {
         event.stopPropagation();
+        for(let i = 0; i < tasks.length; i++) {
+            if(tasks[i].project == ele.parentNode.textContent.replace(/\s+/g, '')) {
+                tasks.splice(i, 1);
+            }
+        }
         removeProject(id);
+        document.getElementById("home").click();
+        
+        
 
     });
 }
