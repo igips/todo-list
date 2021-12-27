@@ -10,15 +10,16 @@ const Project = (name, text) => {
     return {title, id};
 };
 
-const Task = (n, d, da, p, f, i) => {
+const Task = (n, d, da, p, f, i, dateObje) => {
     let name = n;
     let description = d;
     let date = da;
     let project = p;
-    let finished = f;
+    let checked = f;
     let id = i;
+    let dateObj = dateObje;
 
-    return {name, description, date, project, finished, id};
+    return {name, description, date, project, checked, id, dateObj};
 }
 
 

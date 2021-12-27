@@ -1,5 +1,7 @@
-import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton } from "./eventlis";
+import { format } from "date-fns";
+import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent } from "./eventlis";
 import { projects, Task, tasks } from "./projectsandtasks";
+
 
 
 function getNavButtons() {
@@ -159,9 +161,15 @@ function returnTaskById(id) {
 }
 
 function createInnerHtmlForTask(id, title,date) {
-    let a = '<div class="task-left"><input type="checkbox" data-id="' + id +'Ch"><span>'+ title +'</span><div class="delete-edit-task"><img src="img/edit.png" data-id="'+id+'"><img src="img/x.png" data-id="'+id+'D"></div></div><div><span>'+date+'</span></div>';
+    let task = returnTaskById(id);
+    let a = '<div class="task-left" data-id="' + id +'Left"><input type="checkbox" data-id="' + id +'Ch"><span>'+ title +'</span><div class="delete-edit-task"><img src="img/edit.png" data-id="'+id+'"><img src="img/x.png" data-id="'+id+'D"></div></div><div class="task-right" data-id="' + id +'Right"><span>'+date+'</span></div>';
+    if(task.checked == true) {
+        a = '<div class="task-left" data-id="' + id +'Left" style="text-decoration: line-through; opacity: 0.3"><input type="checkbox" data-id="' + id +'Ch" checked="true"><span>'+ title +'</span><div class="delete-edit-task"><img src="img/edit.png" data-id="'+id+'"><img src="img/x.png" data-id="'+id+'D"></div></div><div class="task-right" data-id="' + id +'Right" style="text-decoration: line-through; opacity: 0.3"><span>'+date+'</span></div>';
+    }
     return a;
 }
+
+
 
 function editTask(id) {
     let ele = document.getElementById(id);
@@ -191,7 +199,6 @@ function editTask(id) {
     const textAreaDescription = document.createElement("textarea");
     textAreaDescription.setAttribute("class", "task-description");
     textAreaDescription.setAttribute("id", "detailsOfTask");
-    //textAreaDescription.setAttribute("required", true);
     textAreaDescription.value = taskFromList.description;
     const labelForDes = document.createElement("label");
     labelForDes.textContent = "Description:";
@@ -211,8 +218,12 @@ function editTask(id) {
     inputDate.setAttribute("type", "date");
     inputDate.setAttribute("id", "datePicker");
     inputDate.setAttribute("class", "date-set");
-    //inputDate.setAttribute("required", true);
-    inputDate.value = taskFromList.date;
+    if(taskFromList.dateObj != "") {
+        inputDate.value = format(taskFromList.dateObj, "yyyy-MM-dd");
+    }
+    
+    
+    
     secondContainer.appendChild(inputDate);
 
     const inputProjectName = document.createElement("input");
@@ -245,11 +256,20 @@ function editTask(id) {
         event.stopPropagation();
         taskFromList.name = textareaTitle.value;
         taskFromList.description = textAreaDescription.value;
-        taskFromList.date = inputDate.value;
+        if(inputDate.valueAsDate != null) {
+            taskFromList.dateObj = inputDate.valueAsDate;
+            taskFromList.date = format(inputDate.valueAsDate,"dd/MM/yyyy");
+        } else {
+            taskFromList.dateObj = "";
+            taskFromList.date = "";
+        }
+       
         taskFromList.project = inputProjectName.value;
         if(validateForm() == true) {
             completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
+            
         }
+        
         
     });
 
@@ -265,6 +285,8 @@ function completeEditingTask(id, name, date, ele) {
     addEventListenerToEditTaskButton(document.querySelector("[data-id='"+id+"']"), id);
     addEventListenerToRemoveTaskButton(document.querySelector("[data-id='"+id+"D']"), id);
     document.getElementById("add-task").style.visibility = "visible";
+    checkBoxEvent(document.querySelector("[data-id='"+id+"Ch']"), document.querySelector("[data-id='"+id+"Left']"), document.querySelector("[data-id='"+id+"Right']"), id);
+    
 }
 
 function createTaskEditor() {
@@ -286,7 +308,6 @@ function createTaskEditor() {
     textAreaDescription.setAttribute("class", "task-description");
     textAreaDescription.setAttribute("placeholder", "Details:");
     textAreaDescription.setAttribute("id", "detailsOfTask");
-    //textAreaDescription.setAttribute("required", true);
     form.appendChild(textAreaDescription);
 
     const label = document.createElement("label");
@@ -300,7 +321,6 @@ function createTaskEditor() {
     inputDate.setAttribute("type", "date");
     inputDate.setAttribute("id", "datePicker");
     inputDate.setAttribute("class", "date-set");
-   // inputDate.setAttribute("required", true);
     secondContainer.appendChild(inputDate);
 
 
@@ -335,16 +355,21 @@ function createTaskEditor() {
 }
 
 function createTaskVisual(title, date, id) {
+    let a = returnTaskById(id);
+    
     const divTask = document.createElement("div");
     divTask.setAttribute("class", "task");
     divTask.setAttribute("id", id);
 
     const divLeft = document.createElement("div");
     divLeft.setAttribute("class", "task-left");
+    divLeft.setAttribute("data-id", id+"Left");
 
     const checkBox = document.createElement("input");
     checkBox.setAttribute("type", "checkbox");
     checkBox.setAttribute("data-id", id+"Ch");
+   
+    
     divLeft.appendChild(checkBox);
 
     const text = document.createElement("span");
@@ -357,12 +382,14 @@ function createTaskVisual(title, date, id) {
     const imgEdit = document.createElement("img");
     imgEdit.setAttribute("src", "img/edit.png");
     imgEdit.setAttribute("data-id", id);
+    imgEdit.setAttribute("title", "Details");
     addEventListenerToEditTaskButton(imgEdit, id);
     deleteEdit.appendChild(imgEdit);
 
     const imgDel = document.createElement("img");
     imgDel.setAttribute("src", "img/x.png");
     imgDel.setAttribute("data-id", id+"D");
+    imgDel.setAttribute("title", "Delete");
     addEventListenerToRemoveTaskButton(imgDel, id);
     deleteEdit.appendChild(imgDel);
     divLeft.appendChild(deleteEdit);
@@ -370,12 +397,23 @@ function createTaskVisual(title, date, id) {
     divTask.appendChild(divLeft);
 
     const divRight = document.createElement("div");
-
+    divRight.setAttribute("class", "task-right")
+    divRight.setAttribute("data-id", id+"Right");
     const dateText = document.createElement("span");
     dateText.textContent = date;
 
     divRight.appendChild(dateText);
     divTask.appendChild(divRight);
+    checkBoxEvent(checkBox, divLeft, divRight, id);
+    if(a.checked == true) {
+        checkBox.checked = true;
+        divLeft.style.setProperty("text-decoration", "line-through");
+        divLeft.style.setProperty("opacity", 0.3);
+        divRight.style.setProperty("text-decoration", "line-through");
+        divRight.style.setProperty("opacity", 0.3);
+    }
+
+    
 
     if(document.getElementById("divForAddTaskForm") != null) {
         document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
@@ -396,10 +434,19 @@ function clearForm() {
     
 }
 
+
 function getDataFromTaskFormAndCreateTask() {
     const title = document.getElementById("titleOfTask").value;
     const details = document.getElementById("detailsOfTask").value;
-    const date = document.getElementById("datePicker").value;
+    let date = "";
+    let dateO = "";
+    if(document.getElementById("datePicker").valueAsDate != null) {
+        date = format(document.getElementById("datePicker").valueAsDate,"dd/MM/yyyy");
+        dateO = document.getElementById("datePicker").valueAsDate;
+    }
+    
+    
+    
     let project = "";
     if(document.getElementById("list-name").textContent == "Home") {
         project = document.getElementById("projectNameValue").value;
@@ -407,7 +454,7 @@ function getDataFromTaskFormAndCreateTask() {
         project = document.getElementById("list-name").textContent.replace(/\s+/g, '');
     }
     
-    const task = Task(title, details, date, project, false, setIdForTask());
+    const task = Task(title, details, date, project, false, setIdForTask(), dateO);
     tasks.push(task);
     clearForm();
     if(document.getElementById("list-name").textContent == "Home") {
@@ -494,5 +541,5 @@ function validateForm() {
 
 export {getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, createAddProjectButton, getAddButton,
     getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject, getElementById,createTaskEditor,getDataFromTaskFormAndCreateTask,validateForm, removeTask,
-    editTask, displayTasksInProject, removeAllTasks, displayTasks
+    editTask, displayTasksInProject, removeAllTasks, displayTasks,returnTaskById
 };

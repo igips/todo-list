@@ -1,4 +1,4 @@
-import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks, displayTasks} from "./domMani";
+import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks, displayTasks, returnTaskById} from "./domMani";
 import { Project, projects, tasks } from "./projectsandtasks";
 
 function tabSwitchEvent() {
@@ -188,6 +188,28 @@ function createTaskEvent() {
 
 }
 
+function checkBoxEvent(ele, div, div2, id) {
+    let a = returnTaskById(id);
+
+    ele.addEventListener("change", function() {
+        if(this.checked) {
+            div.style.setProperty("text-decoration", "line-through");
+            div.style.setProperty("opacity", 0.3);
+            div2.style.setProperty("text-decoration", "line-through");
+            div2.style.setProperty("opacity", 0.3);
+            a.checked = true;
+            
+        } else {
+            div.style.setProperty("text-decoration", "none");
+            div.style.setProperty("opacity", 1);
+            div2.style.setProperty("text-decoration", "none");
+            div2.style.setProperty("opacity", 1);
+            a.checked = false;
+        }
+    });
+
+}
+
 
 export {tabSwitchEvent, addProjectEvent, addProjectToList, cancelAddingProject, addEventListenerToProjectButton, addEventListenerToDeleteProjectButton, addTaskButton, cancelAddTaskButton, randomNumber, setIdForProject, setIdForTask, addEventListenerToEditTaskButton,
-addEventListenerToRemoveTaskButton};
+addEventListenerToRemoveTaskButton, checkBoxEvent};
