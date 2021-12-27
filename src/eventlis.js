@@ -9,13 +9,13 @@ function tabSwitchEvent() {
             changeListName(button.textContent);
             if(document.getElementById("list-name").textContent == "Home") {
                 //document.getElementById("tasks").textContent = "";
-                document.getElementById("add-task").style.visibility = "visible";
                 removeAllTasks();
                 displayTasks();
+               // document.getElementById("add-task").style.visibility = "visible";
             } else if (document.getElementById("list-name").textContent == "Today") {
-                document.getElementById("add-task").style.visibility = "hidden";
                 removeAllTasks();
                 displayTodayTasks();
+                document.getElementById("add-task").style.visibility = "hidden";
             } else if (document.getElementById("list-name").textContent == "This Week") {
                 removeAllTasks();
                 displayThisWeekTasks();

@@ -694,13 +694,13 @@ function tabSwitchEvent() {
             (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.changeListName)(button.textContent);
             if(document.getElementById("list-name").textContent == "Home") {
                 //document.getElementById("tasks").textContent = "";
-                document.getElementById("add-task").style.visibility = "visible";
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
+               // document.getElementById("add-task").style.visibility = "visible";
             } else if (document.getElementById("list-name").textContent == "Today") {
-                document.getElementById("add-task").style.visibility = "hidden";
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTodayTasks)();
+                document.getElementById("add-task").style.visibility = "hidden";
             } else if (document.getElementById("list-name").textContent == "This Week") {
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayThisWeekTasks)();
