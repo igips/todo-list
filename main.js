@@ -29,9 +29,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "displayTasksInProject": () => (/* binding */ displayTasksInProject),
 /* harmony export */   "removeAllTasks": () => (/* binding */ removeAllTasks),
 /* harmony export */   "displayTasks": () => (/* binding */ displayTasks),
-/* harmony export */   "returnTaskById": () => (/* binding */ returnTaskById)
+/* harmony export */   "returnTaskById": () => (/* binding */ returnTaskById),
+/* harmony export */   "displayTodayTasks": () => (/* binding */ displayTodayTasks),
+/* harmony export */   "displayThisWeekTasks": () => (/* binding */ displayThisWeekTasks)
 /* harmony export */ });
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
 /* harmony import */ var _eventlis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 
@@ -303,6 +306,21 @@ function editTask(id) {
         taskFromList.project = inputProjectName.value;
         if(validateForm() == true) {
             completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
+            if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
+                (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortDown)();
+            } else {
+                (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortUP)();
+            }
+            removeAllTasks();
+            if(document.getElementById("list-name").textContent == "Home") {
+                displayTasks();
+            } else if(document.getElementById("list-name").textContent == "This Week") {
+                displayThisWeekTasks();
+            } else if (document.getElementById("list-name").textContent == "Today") {
+                displayTodayTasks();
+            } else {
+                displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            }
             
         }
         
@@ -493,6 +511,12 @@ function getDataFromTaskFormAndCreateTask() {
     const task = (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.Task)(title, details, date, project, false, (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.setIdForTask)(), dateO);
     _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.push(task);
     clearForm();
+    removeAllTasks();
+    if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
+        (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortDown)();
+    } else {
+        (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortUP)();
+    }
     if(document.getElementById("list-name").textContent == "Home") {
         displayTasks();
     } else {
@@ -504,6 +528,62 @@ function getDataFromTaskFormAndCreateTask() {
 
     
 
+}
+
+function displayThisWeekTasks() {
+    _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.forEach((task) => {
+        const children = document.querySelectorAll("div.task");
+        let check = false;
+       
+        
+        for(let i = 0; i < children.length; i++) {
+            let aa = children[i].getAttribute("id");
+            if(aa == task.id) {
+                check = true;
+            }
+        }
+        
+        
+        
+        if(check == false && (0,date_fns__WEBPACK_IMPORTED_MODULE_3__["default"])(task.dateObj, new Date()) >= 0 && (0,date_fns__WEBPACK_IMPORTED_MODULE_3__["default"])(task.dateObj, new Date()) <= 7) {
+            createTaskVisual(task.name, task.date, task.id);
+        } else {
+            if(document.getElementById("divForAddTaskForm") != null) {
+                document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
+            }
+            document.getElementById("add-task").style.visibility = "visible";
+
+        }
+        
+    });
+}
+
+function displayTodayTasks() {
+    _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.forEach((task) => {
+        const children = document.querySelectorAll("div.task");
+        let check = false;
+       
+        
+        for(let i = 0; i < children.length; i++) {
+            let aa = children[i].getAttribute("id");
+            if(aa == task.id) {
+                check = true;
+            }
+        }
+        
+        (0,date_fns__WEBPACK_IMPORTED_MODULE_3__["default"])(task.dateObj, new Date());
+        
+        if(check == false && task.date == (0,date_fns__WEBPACK_IMPORTED_MODULE_2__["default"])(new Date(),"dd/MM/yyyy")) {
+            createTaskVisual(task.name, task.date, task.id);
+        } else {
+            if(document.getElementById("divForAddTaskForm") != null) {
+                document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
+            }
+            document.getElementById("add-task").style.visibility = "visible";
+
+        }
+        
+    });
 }
 
 function displayTasks() {
@@ -596,7 +676,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "setIdForTask": () => (/* binding */ setIdForTask),
 /* harmony export */   "addEventListenerToEditTaskButton": () => (/* binding */ addEventListenerToEditTaskButton),
 /* harmony export */   "addEventListenerToRemoveTaskButton": () => (/* binding */ addEventListenerToRemoveTaskButton),
-/* harmony export */   "checkBoxEvent": () => (/* binding */ checkBoxEvent)
+/* harmony export */   "checkBoxEvent": () => (/* binding */ checkBoxEvent),
+/* harmony export */   "sortByDate": () => (/* binding */ sortByDate),
+/* harmony export */   "sortUP": () => (/* binding */ sortUP),
+/* harmony export */   "sortDown": () => (/* binding */ sortDown)
 /* harmony export */ });
 /* harmony import */ var _domMani__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
@@ -610,12 +693,17 @@ function tabSwitchEvent() {
         button.addEventListener("click", () => {
             (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.changeListName)(button.textContent);
             if(document.getElementById("list-name").textContent == "Home") {
-                document.getElementById("tasks").textContent = "";
+                //document.getElementById("tasks").textContent = "";
                 document.getElementById("add-task").style.visibility = "visible";
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
             } else if (document.getElementById("list-name").textContent == "Today") {
                 document.getElementById("add-task").style.visibility = "hidden";
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTodayTasks)();
             } else if (document.getElementById("list-name").textContent == "This Week") {
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayThisWeekTasks)();
                 document.getElementById("add-task").style.visibility = "hidden";
             }
         });
@@ -722,6 +810,7 @@ function addEventListenerToDeleteProjectButton(ele, id) {
         for(let i = 0; i < _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.length; i++) {
             if(_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks[i].project == ele.parentNode.textContent.replace(/\s+/g, '')) {
                 _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.splice(i, 1);
+                
             }
         }
         
@@ -810,6 +899,54 @@ function checkBoxEvent(ele, div, div2, id) {
         }
     });
 
+}
+
+function sortUP() {
+    _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.sort(function(a,b) {
+        return b.dateObj - a.dateObj;
+    });
+}
+
+function sortDown() {
+    _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.sort(function(a,b) {
+        return a.dateObj - b.dateObj;
+    });
+}
+
+function sortByDate() {
+    const sorter =  document.getElementById("arrow-sort");
+    
+
+    sorter.addEventListener("click", () => {
+        event.stopPropagation();
+        const a = sorter.getAttribute("data-way");
+        
+        if(a == "DOWN") {
+            sorter.setAttribute("src", "img/uparrow.png");
+            sorter.setAttribute("data-way", "UP");
+            sortUP();
+            (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
+            if(document.getElementById("list-name").textContent == "Home") {
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
+            } else {
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasksInProject)(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            }
+            
+            
+        } else {
+            sorter.setAttribute("src", "img/downarrow.png");
+            sorter.setAttribute("data-way", "DOWN");
+            sortDown();
+            (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
+            if(document.getElementById("list-name").textContent == "Home") {
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
+            } else {
+                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasksInProject)(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            }
+            
+        }
+        
+    });
 }
 
 
@@ -3680,6 +3817,123 @@ function throwProtectedError(token, format, input) {
   }
 }
 
+/***/ }),
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ differenceInCalendarDays)
+/* harmony export */ });
+/* harmony import */ var _lib_getTimezoneOffsetInMilliseconds_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(20);
+/* harmony import */ var _startOfDay_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(51);
+/* harmony import */ var _lib_requiredArgs_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+
+
+var MILLISECONDS_IN_DAY = 86400000;
+/**
+ * @name differenceInCalendarDays
+ * @category Day Helpers
+ * @summary Get the number of calendar days between the given dates.
+ *
+ * @description
+ * Get the number of calendar days between the given dates. This means that the times are removed
+ * from the dates and then the difference in days is calculated.
+ *
+ * ### v2.0.0 breaking changes:
+ *
+ * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
+ *
+ * @param {Date|Number} dateLeft - the later date
+ * @param {Date|Number} dateRight - the earlier date
+ * @returns {Number} the number of calendar days
+ * @throws {TypeError} 2 arguments required
+ *
+ * @example
+ * // How many calendar days are between
+ * // 2 July 2011 23:00:00 and 2 July 2012 00:00:00?
+ * const result = differenceInCalendarDays(
+ *   new Date(2012, 6, 2, 0, 0),
+ *   new Date(2011, 6, 2, 23, 0)
+ * )
+ * //=> 366
+ * // How many calendar days are between
+ * // 2 July 2011 23:59:00 and 3 July 2011 00:01:00?
+ * const result = differenceInCalendarDays(
+ *   new Date(2011, 6, 3, 0, 1),
+ *   new Date(2011, 6, 2, 23, 59)
+ * )
+ * //=> 1
+ */
+
+function differenceInCalendarDays(dirtyDateLeft, dirtyDateRight) {
+  (0,_lib_requiredArgs_index_js__WEBPACK_IMPORTED_MODULE_0__["default"])(2, arguments);
+  var startOfDayLeft = (0,_startOfDay_index_js__WEBPACK_IMPORTED_MODULE_1__["default"])(dirtyDateLeft);
+  var startOfDayRight = (0,_startOfDay_index_js__WEBPACK_IMPORTED_MODULE_1__["default"])(dirtyDateRight);
+  var timestampLeft = startOfDayLeft.getTime() - (0,_lib_getTimezoneOffsetInMilliseconds_index_js__WEBPACK_IMPORTED_MODULE_2__["default"])(startOfDayLeft);
+  var timestampRight = startOfDayRight.getTime() - (0,_lib_getTimezoneOffsetInMilliseconds_index_js__WEBPACK_IMPORTED_MODULE_2__["default"])(startOfDayRight); // Round the number of days to the nearest integer
+  // because the number of milliseconds in a day is not constant
+  // (e.g. it's different in the day of the daylight saving time clock shift)
+
+  return Math.round((timestampLeft - timestampRight) / MILLISECONDS_IN_DAY);
+}
+
+/***/ }),
+/* 51 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ startOfDay)
+/* harmony export */ });
+/* harmony import */ var _toDate_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
+/* harmony import */ var _lib_requiredArgs_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+
+
+/**
+ * @name startOfDay
+ * @category Day Helpers
+ * @summary Return the start of a day for the given date.
+ *
+ * @description
+ * Return the start of a day for the given date.
+ * The result will be in the local timezone.
+ *
+ * ### v2.0.0 breaking changes:
+ *
+ * - [Changes that are common for the whole library](https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#Common-Changes).
+ *
+ * @param {Date|Number} date - the original date
+ * @returns {Date} the start of a day
+ * @throws {TypeError} 1 argument required
+ *
+ * @example
+ * // The start of a day for 2 September 2014 11:55:00:
+ * const result = startOfDay(new Date(2014, 8, 2, 11, 55, 0))
+ * //=> Tue Sep 02 2014 00:00:00
+ */
+
+function startOfDay(dirtyDate) {
+  (0,_lib_requiredArgs_index_js__WEBPACK_IMPORTED_MODULE_0__["default"])(1, arguments);
+  var date = (0,_toDate_index_js__WEBPACK_IMPORTED_MODULE_1__["default"])(dirtyDate);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -3749,6 +4003,7 @@ __webpack_require__.r(__webpack_exports__);
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addProjectToList)();
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.cancelAddingProject)();
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addTaskButton)();
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortByDate)();
 
 })();
 
