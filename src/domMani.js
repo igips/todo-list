@@ -1,5 +1,5 @@
-import { format } from "date-fns";
-import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent } from "./eventlis";
+import { differenceInCalendarDays, format, formatDistance } from "date-fns";
+import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent, sortDown, sortUP } from "./eventlis";
 import { projects, Task, tasks } from "./projectsandtasks";
 
 
@@ -267,6 +267,21 @@ function editTask(id) {
         taskFromList.project = inputProjectName.value;
         if(validateForm() == true) {
             completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
+            if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
+                sortDown();
+            } else {
+                sortUP();
+            }
+            removeAllTasks();
+            if(document.getElementById("list-name").textContent == "Home") {
+                displayTasks();
+            } else if(document.getElementById("list-name").textContent == "This Week") {
+                displayThisWeekTasks();
+            } else if (document.getElementById("list-name").textContent == "Today") {
+                displayTodayTasks();
+            } else {
+                displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            }
             
         }
         
@@ -457,6 +472,12 @@ function getDataFromTaskFormAndCreateTask() {
     const task = Task(title, details, date, project, false, setIdForTask(), dateO);
     tasks.push(task);
     clearForm();
+    removeAllTasks();
+    if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
+        sortDown();
+    } else {
+        sortUP();
+    }
     if(document.getElementById("list-name").textContent == "Home") {
         displayTasks();
     } else {
@@ -468,6 +489,62 @@ function getDataFromTaskFormAndCreateTask() {
 
     
 
+}
+
+function displayThisWeekTasks() {
+    tasks.forEach((task) => {
+        const children = document.querySelectorAll("div.task");
+        let check = false;
+       
+        
+        for(let i = 0; i < children.length; i++) {
+            let aa = children[i].getAttribute("id");
+            if(aa == task.id) {
+                check = true;
+            }
+        }
+        
+        
+        
+        if(check == false && differenceInCalendarDays(task.dateObj, new Date()) >= 0 && differenceInCalendarDays(task.dateObj, new Date()) <= 7) {
+            createTaskVisual(task.name, task.date, task.id);
+        } else {
+            if(document.getElementById("divForAddTaskForm") != null) {
+                document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
+            }
+            document.getElementById("add-task").style.visibility = "visible";
+
+        }
+        
+    });
+}
+
+function displayTodayTasks() {
+    tasks.forEach((task) => {
+        const children = document.querySelectorAll("div.task");
+        let check = false;
+       
+        
+        for(let i = 0; i < children.length; i++) {
+            let aa = children[i].getAttribute("id");
+            if(aa == task.id) {
+                check = true;
+            }
+        }
+        
+        differenceInCalendarDays(task.dateObj, new Date());
+        
+        if(check == false && task.date == format(new Date(),"dd/MM/yyyy")) {
+            createTaskVisual(task.name, task.date, task.id);
+        } else {
+            if(document.getElementById("divForAddTaskForm") != null) {
+                document.getElementById("divForAddTaskForm").parentNode.removeChild(document.getElementById("divForAddTaskForm"));
+            }
+            document.getElementById("add-task").style.visibility = "visible";
+
+        }
+        
+    });
 }
 
 function displayTasks() {
@@ -541,5 +618,5 @@ function validateForm() {
 
 export {getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, createAddProjectButton, getAddButton,
     getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject, getElementById,createTaskEditor,getDataFromTaskFormAndCreateTask,validateForm, removeTask,
-    editTask, displayTasksInProject, removeAllTasks, displayTasks,returnTaskById
+    editTask, displayTasksInProject, removeAllTasks, displayTasks,returnTaskById, displayTodayTasks,displayThisWeekTasks
 };
