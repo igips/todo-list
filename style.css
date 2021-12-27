@@ -284,9 +284,10 @@ textarea {
     margin-bottom: 5px;
 }
 
-.task:hover {
+.delete-edit-task:hover {
     cursor: pointer;
 }
+
 
 .task-left {
     display: flex;
