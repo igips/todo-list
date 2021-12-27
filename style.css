@@ -269,8 +269,8 @@ input[type="checkbox"] {
 }
 
 textarea {
+    outline:none;
     resize: none;
-    outline: none;
 }
 
 .task-title-textarea, .task-description {
@@ -278,6 +278,12 @@ textarea {
     background-color: #F8FFF0;
     height: 20px;
     font-family: "Roboto Mono";
+}
+
+.task-description {
+    height: 100px;
+    resize: vertical;
+    width: 400px;
 }
 
 .task-title-textarea {
