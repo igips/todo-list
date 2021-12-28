@@ -267,37 +267,45 @@ function editTask(id) {
         taskFromList.project = inputProjectName.value;
         if(validateForm() == true) {
             completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
-            if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
-                sortDown();
-            } else {
-                sortUP();
-            }
-            removeAllTasks();
-            if(document.getElementById("list-name").textContent == "Home") {
-                displayTasks();
-            } else if(document.getElementById("list-name").textContent == "This Week") {
-                displayThisWeekTasks();
-            } else if (document.getElementById("list-name").textContent == "Today") {
-                displayTodayTasks();
-            } else {
-                displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            }
+            displayTaskManager();
             
         }
+        
         
         
     });
 
     imgCancel.addEventListener("click", () => {
+        event.stopPropagation();
         completeEditingTask(id, taskFromList.name, taskFromList.date, ele);
+        displayTaskManager();
     });
     
    
 }
 
+function displayTaskManager() {
+    if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
+        sortDown();
+    } else {
+        sortUP();
+    }
+    removeAllTasks();
+    if(document.getElementById("list-name").textContent == "Home") {
+        displayTasks();
+    } else if(document.getElementById("list-name").textContent == "This Week") {
+        displayThisWeekTasks();
+    } else if (document.getElementById("list-name").textContent == "Today") {
+        displayTodayTasks();
+    } else {
+        displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+    }
+}
+
 function completeEditingTask(id, name, date, ele) {
     ele.innerHTML = createInnerHtmlForTask(id, name, date);
     addEventListenerToEditTaskButton(document.querySelector("[data-id='"+id+"']"), id);
+    addEventListenerToEditTaskButton(document.getElementById(id), id);
     addEventListenerToRemoveTaskButton(document.querySelector("[data-id='"+id+"D']"), id);
     document.getElementById("add-task").style.visibility = "visible";
     checkBoxEvent(document.querySelector("[data-id='"+id+"Ch']"), document.querySelector("[data-id='"+id+"Left']"), document.querySelector("[data-id='"+id+"Right']"), id);
@@ -373,6 +381,7 @@ function createTaskVisual(title, date, id) {
     let a = returnTaskById(id);
     
     const divTask = document.createElement("div");
+    addEventListenerToEditTaskButton(divTask, id);
     divTask.setAttribute("class", "task");
     divTask.setAttribute("id", id);
 
@@ -437,6 +446,9 @@ function createTaskVisual(title, date, id) {
     
     document.getElementById("tasks").appendChild(divTask);
     document.getElementById("add-task").style.visibility = "visible";
+    
+    
+   
 }
 
 function clearForm() {
@@ -618,5 +630,5 @@ function validateForm() {
 
 export {getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, createAddProjectButton, getAddButton,
     getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject, getElementById,createTaskEditor,getDataFromTaskFormAndCreateTask,validateForm, removeTask,
-    editTask, displayTasksInProject, removeAllTasks, displayTasks,returnTaskById, displayTodayTasks,displayThisWeekTasks
+    editTask, displayTasksInProject, removeAllTasks, displayTasks,returnTaskById, displayTodayTasks,displayThisWeekTasks, displayTaskManager
 };

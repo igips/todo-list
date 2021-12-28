@@ -1,4 +1,4 @@
-import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks, displayTasks, returnTaskById, displayTodayTasks, displayThisWeekTasks} from "./domMani";
+import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks, displayTasks, returnTaskById, displayTodayTasks, displayThisWeekTasks, displayTaskManager} from "./domMani";
 import { Project, projects, tasks } from "./projectsandtasks";
 
 function tabSwitchEvent() {
@@ -8,10 +8,10 @@ function tabSwitchEvent() {
         button.addEventListener("click", () => {
             changeListName(button.textContent);
             if(document.getElementById("list-name").textContent == "Home") {
-                //document.getElementById("tasks").textContent = "";
+                document.getElementById("tasks").textContent = "";
                 removeAllTasks();
                 displayTasks();
-               // document.getElementById("add-task").style.visibility = "visible";
+                document.getElementById("add-task").style.visibility = "visible";
             } else if (document.getElementById("list-name").textContent == "Today") {
                 removeAllTasks();
                 displayTodayTasks();
@@ -140,10 +140,32 @@ function addEventListenerToDeleteProjectButton(ele, id) {
     });
 }
 
+
+
 function addEventListenerToEditTaskButton(ele, id) {
+   
     ele.addEventListener("click", () => {
-        event.stopPropagation();
+        ele.style.cursor = "default";
+        if(event.currentTarget !== event.target) {
+            return;
+        }
+        //event.stopPropagation();
         editTask(id);
+        
+        let aab = Array.from(document.getElementsByClassName("task"));
+
+        aab.forEach((c) => {
+            if(c.getAttribute("id") != id ) {
+                let elClone = c.cloneNode(true);
+                c.parentNode.replaceChild(elClone, c);
+                elClone.style.cursor = "default";
+            }
+        });
+        let aa = Array.from(document.getElementsByClassName("delete-edit-task"));
+        aa.forEach((a) =>{
+            a.style.visibility = "hidden";
+        });
+        
     });
 }
 
@@ -164,6 +186,11 @@ function addTaskButton() {
         document.getElementById("add-task").style.visibility = "hidden";
         cancelAddTaskButton();
         createTaskEvent();
+        let aa = Array.from(document.getElementsByClassName("delete-edit-task"));
+
+        aa.forEach((a) =>{
+            a.style.visibility = "hidden";
+        });
         
 
     });
@@ -177,6 +204,7 @@ function cancelAddTaskButton() {
         const div = getElementById("divForAddTaskForm");
         div.parentNode.removeChild(div);
         document.getElementById("add-task").style.visibility = "visible";
+        displayTaskManager();
     });
 }
 

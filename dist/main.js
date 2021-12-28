@@ -31,7 +31,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "displayTasks": () => (/* binding */ displayTasks),
 /* harmony export */   "returnTaskById": () => (/* binding */ returnTaskById),
 /* harmony export */   "displayTodayTasks": () => (/* binding */ displayTodayTasks),
-/* harmony export */   "displayThisWeekTasks": () => (/* binding */ displayThisWeekTasks)
+/* harmony export */   "displayThisWeekTasks": () => (/* binding */ displayThisWeekTasks),
+/* harmony export */   "displayTaskManager": () => (/* binding */ displayTaskManager)
 /* harmony export */ });
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
@@ -306,37 +307,45 @@ function editTask(id) {
         taskFromList.project = inputProjectName.value;
         if(validateForm() == true) {
             completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
-            if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
-                (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortDown)();
-            } else {
-                (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortUP)();
-            }
-            removeAllTasks();
-            if(document.getElementById("list-name").textContent == "Home") {
-                displayTasks();
-            } else if(document.getElementById("list-name").textContent == "This Week") {
-                displayThisWeekTasks();
-            } else if (document.getElementById("list-name").textContent == "Today") {
-                displayTodayTasks();
-            } else {
-                displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            }
+            displayTaskManager();
             
         }
+        
         
         
     });
 
     imgCancel.addEventListener("click", () => {
+        event.stopPropagation();
         completeEditingTask(id, taskFromList.name, taskFromList.date, ele);
+        displayTaskManager();
     });
     
    
 }
 
+function displayTaskManager() {
+    if(document.getElementById("arrow-sort").getAttribute("data-way") == "DOWN") {
+        (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortDown)();
+    } else {
+        (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortUP)();
+    }
+    removeAllTasks();
+    if(document.getElementById("list-name").textContent == "Home") {
+        displayTasks();
+    } else if(document.getElementById("list-name").textContent == "This Week") {
+        displayThisWeekTasks();
+    } else if (document.getElementById("list-name").textContent == "Today") {
+        displayTodayTasks();
+    } else {
+        displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+    }
+}
+
 function completeEditingTask(id, name, date, ele) {
     ele.innerHTML = createInnerHtmlForTask(id, name, date);
     (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToEditTaskButton)(document.querySelector("[data-id='"+id+"']"), id);
+    (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToEditTaskButton)(document.getElementById(id), id);
     (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToRemoveTaskButton)(document.querySelector("[data-id='"+id+"D']"), id);
     document.getElementById("add-task").style.visibility = "visible";
     (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.checkBoxEvent)(document.querySelector("[data-id='"+id+"Ch']"), document.querySelector("[data-id='"+id+"Left']"), document.querySelector("[data-id='"+id+"Right']"), id);
@@ -412,6 +421,7 @@ function createTaskVisual(title, date, id) {
     let a = returnTaskById(id);
     
     const divTask = document.createElement("div");
+    (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addEventListenerToEditTaskButton)(divTask, id);
     divTask.setAttribute("class", "task");
     divTask.setAttribute("id", id);
 
@@ -476,6 +486,9 @@ function createTaskVisual(title, date, id) {
     
     document.getElementById("tasks").appendChild(divTask);
     document.getElementById("add-task").style.visibility = "visible";
+    
+    
+   
 }
 
 function clearForm() {
@@ -693,10 +706,10 @@ function tabSwitchEvent() {
         button.addEventListener("click", () => {
             (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.changeListName)(button.textContent);
             if(document.getElementById("list-name").textContent == "Home") {
-                //document.getElementById("tasks").textContent = "";
+                document.getElementById("tasks").textContent = "";
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
-               // document.getElementById("add-task").style.visibility = "visible";
+                document.getElementById("add-task").style.visibility = "visible";
             } else if (document.getElementById("list-name").textContent == "Today") {
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTodayTasks)();
@@ -825,10 +838,32 @@ function addEventListenerToDeleteProjectButton(ele, id) {
     });
 }
 
+
+
 function addEventListenerToEditTaskButton(ele, id) {
+   
     ele.addEventListener("click", () => {
-        event.stopPropagation();
+        ele.style.cursor = "default";
+        if(event.currentTarget !== event.target) {
+            return;
+        }
+        //event.stopPropagation();
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.editTask)(id);
+        
+        let aab = Array.from(document.getElementsByClassName("task"));
+
+        aab.forEach((c) => {
+            if(c.getAttribute("id") != id ) {
+                let elClone = c.cloneNode(true);
+                c.parentNode.replaceChild(elClone, c);
+                elClone.style.cursor = "default";
+            }
+        });
+        let aa = Array.from(document.getElementsByClassName("delete-edit-task"));
+        aa.forEach((a) =>{
+            a.style.visibility = "hidden";
+        });
+        
     });
 }
 
@@ -849,6 +884,11 @@ function addTaskButton() {
         document.getElementById("add-task").style.visibility = "hidden";
         cancelAddTaskButton();
         createTaskEvent();
+        let aa = Array.from(document.getElementsByClassName("delete-edit-task"));
+
+        aa.forEach((a) =>{
+            a.style.visibility = "hidden";
+        });
         
 
     });
@@ -862,6 +902,7 @@ function cancelAddTaskButton() {
         const div = (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.getElementById)("divForAddTaskForm");
         div.parentNode.removeChild(div);
         document.getElementById("add-task").style.visibility = "visible";
+        (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTaskManager)();
     });
 }
 
