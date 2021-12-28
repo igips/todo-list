@@ -32,7 +32,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "returnTaskById": () => (/* binding */ returnTaskById),
 /* harmony export */   "displayTodayTasks": () => (/* binding */ displayTodayTasks),
 /* harmony export */   "displayThisWeekTasks": () => (/* binding */ displayThisWeekTasks),
-/* harmony export */   "displayTaskManager": () => (/* binding */ displayTaskManager)
+/* harmony export */   "displayTaskManager": () => (/* binding */ displayTaskManager),
+/* harmony export */   "createAddProjectButtona": () => (/* binding */ createAddProjectButtona)
 /* harmony export */ });
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
@@ -54,6 +55,14 @@ function getElementById(id) {
     const ele = document.getElementById(id);
 
     return ele;
+}
+
+function createAddProjectButtona() {
+    const addProject = document.createElement("button");
+    addProject.setAttribute("id", "add-project");
+    addProject.innerHTML = '<img src="img/add.png" alt="">Add Project';
+    const proje = document.getElementById("projects");
+    proje.appendChild(addProject);
 }
 
 
@@ -310,6 +319,8 @@ function editTask(id) {
             displayTaskManager();
             
         }
+
+        (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
         
         
         
@@ -335,11 +346,14 @@ function displayTaskManager() {
         displayTasks();
     } else if(document.getElementById("list-name").textContent == "This Week") {
         displayThisWeekTasks();
+        document.getElementById("add-task").style.visibility = "hidden";
     } else if (document.getElementById("list-name").textContent == "Today") {
         displayTodayTasks();
+        document.getElementById("add-task").style.visibility = "hidden";
     } else {
         displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
     }
+    (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
 }
 
 function completeEditingTask(id, name, date, ele) {
@@ -556,7 +570,7 @@ function displayThisWeekTasks() {
             }
         }
         
-        
+
         
         if(check == false && (0,date_fns__WEBPACK_IMPORTED_MODULE_3__["default"])(task.dateObj, new Date()) >= 0 && (0,date_fns__WEBPACK_IMPORTED_MODULE_3__["default"])(task.dateObj, new Date()) <= 7) {
             createTaskVisual(task.name, task.date, task.id);
@@ -584,7 +598,7 @@ function displayTodayTasks() {
             }
         }
         
-        (0,date_fns__WEBPACK_IMPORTED_MODULE_3__["default"])(task.dateObj, new Date());
+        //differenceInCalendarDays(task.dateObj, new Date());
         
         if(check == false && task.date == (0,date_fns__WEBPACK_IMPORTED_MODULE_2__["default"])(new Date(),"dd/MM/yyyy")) {
             createTaskVisual(task.name, task.date, task.id);
@@ -749,6 +763,7 @@ function addProjectToList() {
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.hideProjectInput)();
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayProjects)();
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.createAddProjectButton)();
+        (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyProjectsLocal)();
 
         document.getElementById(project.id).click();
     });
@@ -831,6 +846,9 @@ function addEventListenerToDeleteProjectButton(ele, id) {
         if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent.replace(/\s+/g, '')) {
             document.getElementById("home").click();
         }
+
+        (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyProjectsLocal)();
+        (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
         
         
         
@@ -871,6 +889,7 @@ function addEventListenerToRemoveTaskButton(ele, id) {
     ele.addEventListener("click", () => {
         event.stopPropagation();
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeTask)(id);
+        (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
     });
 }
 
@@ -913,6 +932,7 @@ function createTaskEvent() {
         event.stopPropagation();
         if((0,_domMani__WEBPACK_IMPORTED_MODULE_0__.validateForm)() == true) {
             (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.getDataFromTaskFormAndCreateTask)();
+            (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
         }
         
         
@@ -930,6 +950,7 @@ function checkBoxEvent(ele, div, div2, id) {
             div2.style.setProperty("text-decoration", "line-through");
             div2.style.setProperty("opacity", 0.3);
             a.checked = true;
+            (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
             
         } else {
             div.style.setProperty("text-decoration", "none");
@@ -937,6 +958,7 @@ function checkBoxEvent(ele, div, div2, id) {
             div2.style.setProperty("text-decoration", "none");
             div2.style.setProperty("opacity", 1);
             a.checked = false;
+            (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
         }
     });
 
@@ -944,12 +966,14 @@ function checkBoxEvent(ele, div, div2, id) {
 
 function sortUP() {
     _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.sort(function(a,b) {
+        (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
         return b.dateObj - a.dateObj;
     });
 }
 
 function sortDown() {
     _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.tasks.sort(function(a,b) {
+        (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyTasksLocal)();
         return a.dateObj - b.dateObj;
     });
 }
@@ -965,25 +989,27 @@ function sortByDate() {
         if(a == "DOWN") {
             sorter.setAttribute("src", "img/uparrow.png");
             sorter.setAttribute("data-way", "UP");
-            sortUP();
-            (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
-            if(document.getElementById("list-name").textContent == "Home") {
-                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
-            } else {
-                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasksInProject)(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            }
-            
-            
+            //sortUP();
+           // updateMyTasksLocal();
+          //  removeAllTasks();
+            // if(document.getElementById("list-name").textContent == "Home") {
+            //     displayTasks();
+            // } else {
+            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            // }
+            (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTaskManager)();
         } else {
             sorter.setAttribute("src", "img/downarrow.png");
             sorter.setAttribute("data-way", "DOWN");
-            sortDown();
-            (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
-            if(document.getElementById("list-name").textContent == "Home") {
-                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
-            } else {
-                (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasksInProject)(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            }
+            // sortDown();
+            // updateMyTasksLocal();
+            // removeAllTasks();
+            // if(document.getElementById("list-name").textContent == "Home") {
+            //     displayTasks();
+            // } else {
+            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            // }
+            (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTaskManager)();
             
         }
         
@@ -1002,13 +1028,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Project": () => (/* binding */ Project),
 /* harmony export */   "projects": () => (/* binding */ projects),
 /* harmony export */   "tasks": () => (/* binding */ tasks),
-/* harmony export */   "Task": () => (/* binding */ Task)
+/* harmony export */   "Task": () => (/* binding */ Task),
+/* harmony export */   "updateMyProjectsLocal": () => (/* binding */ updateMyProjectsLocal),
+/* harmony export */   "updateMyTasksLocal": () => (/* binding */ updateMyTasksLocal)
 /* harmony export */ });
-const projects = [];
-const tasks = [];
+const projects = myProjectsLocal();
+const tasks = myTasksLocal();
 
 
+function myProjectsLocal() {
+    let myProjects = [];
+    if(localStorage.getItem("myProjects")) {
+        myProjects = JSON.parse(localStorage.getItem("myProjects"));
+        return myProjects;
 
+    } else {
+        return myProjects;
+    }
+}
+
+function myTasksLocal() {
+    let myTasks = [];
+    if(localStorage.getItem("myTasks")) {
+        myTasks = JSON.parse(localStorage.getItem("myTasks"));
+        for(let i = 0; i < myTasks.length; i++) {
+            myTasks[i].dateObj = new Date(myTasks[i].dateObj);
+            console.log(myTasks[i].dateObj);
+        }
+        return myTasks;
+
+    } else {
+        return myTasks;
+    }
+}
+
+function updateMyProjectsLocal() {
+    
+    localStorage.setItem("myProjects", JSON.stringify(projects));
+}
+
+function updateMyTasksLocal() {
+
+    localStorage.setItem("myTasks", JSON.stringify(tasks));
+}
 
 const Project = (name, text) => {
     const title = name;
@@ -4036,15 +4098,23 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _eventlis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _domMani__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _eventlis__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 
 
-(0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.tabSwitchEvent)();
-(0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addProjectEvent)();
-(0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addProjectToList)();
-(0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.cancelAddingProject)();
-(0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.addTaskButton)();
-(0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.sortByDate)();
+
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.sortByDate)();
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.sortDown)();
+//removeAllTasks();
+(0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayProjects)();
+(0,_domMani__WEBPACK_IMPORTED_MODULE_0__.createAddProjectButtona)();
+(0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.addProjectEvent)();
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.addProjectToList)();
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.tabSwitchEvent)();
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.cancelAddingProject)();
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.addTaskButton)();
+
 
 })();
 
