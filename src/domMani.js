@@ -1,6 +1,6 @@
-import { differenceInCalendarDays, format, formatDistance } from "date-fns";
+import { differenceInCalendarDays, format, formatDistance, parseISO } from "date-fns";
 import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent, sortDown, sortUP } from "./eventlis";
-import { projects, Task, tasks } from "./projectsandtasks";
+import { projects, Task, tasks, updateMyTasksLocal } from "./projectsandtasks";
 
 
 
@@ -14,6 +14,14 @@ function getElementById(id) {
     const ele = document.getElementById(id);
 
     return ele;
+}
+
+function createAddProjectButtona() {
+    const addProject = document.createElement("button");
+    addProject.setAttribute("id", "add-project");
+    addProject.innerHTML = '<img src="img/add.png" alt="">Add Project';
+    const proje = document.getElementById("projects");
+    proje.appendChild(addProject);
 }
 
 
@@ -270,6 +278,8 @@ function editTask(id) {
             displayTaskManager();
             
         }
+
+        updateMyTasksLocal();
         
         
         
@@ -295,11 +305,14 @@ function displayTaskManager() {
         displayTasks();
     } else if(document.getElementById("list-name").textContent == "This Week") {
         displayThisWeekTasks();
+        document.getElementById("add-task").style.visibility = "hidden";
     } else if (document.getElementById("list-name").textContent == "Today") {
         displayTodayTasks();
+        document.getElementById("add-task").style.visibility = "hidden";
     } else {
         displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
     }
+    updateMyTasksLocal();
 }
 
 function completeEditingTask(id, name, date, ele) {
@@ -516,7 +529,7 @@ function displayThisWeekTasks() {
             }
         }
         
-        
+
         
         if(check == false && differenceInCalendarDays(task.dateObj, new Date()) >= 0 && differenceInCalendarDays(task.dateObj, new Date()) <= 7) {
             createTaskVisual(task.name, task.date, task.id);
@@ -544,7 +557,7 @@ function displayTodayTasks() {
             }
         }
         
-        differenceInCalendarDays(task.dateObj, new Date());
+        //differenceInCalendarDays(task.dateObj, new Date());
         
         if(check == false && task.date == format(new Date(),"dd/MM/yyyy")) {
             createTaskVisual(task.name, task.date, task.id);
@@ -630,5 +643,5 @@ function validateForm() {
 
 export {getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, createAddProjectButton, getAddButton,
     getProjectNameInput, hideProjectInput, getCancelButton, createProjectButton, displayProjects, removeProject, getElementById,createTaskEditor,getDataFromTaskFormAndCreateTask,validateForm, removeTask,
-    editTask, displayTasksInProject, removeAllTasks, displayTasks,returnTaskById, displayTodayTasks,displayThisWeekTasks, displayTaskManager
+    editTask, displayTasksInProject, removeAllTasks, displayTasks,returnTaskById, displayTodayTasks,displayThisWeekTasks, displayTaskManager,createAddProjectButtona
 };

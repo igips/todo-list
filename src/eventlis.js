@@ -1,5 +1,5 @@
 import { getNavButtons, changeListName, getAddProjectButton, removeAddProjectButton, showProjectInput, getAddButton, getProjectNameInput, hideProjectInput, createAddProjectButton, getCancelButton, displayProjects, removeProject, getElementById, createTaskEditor, getDataFromTaskFormAndCreateTask, validateForm, removeTask, editTask, displayTasksInProject, removeAllTasks, displayTasks, returnTaskById, displayTodayTasks, displayThisWeekTasks, displayTaskManager} from "./domMani";
-import { Project, projects, tasks } from "./projectsandtasks";
+import { Project, projects, tasks, updateMyProjectsLocal, updateMyTasksLocal } from "./projectsandtasks";
 
 function tabSwitchEvent() {
     const buttons = getNavButtons();
@@ -51,6 +51,7 @@ function addProjectToList() {
         hideProjectInput();
         displayProjects();
         createAddProjectButton();
+        updateMyProjectsLocal();
 
         document.getElementById(project.id).click();
     });
@@ -133,6 +134,9 @@ function addEventListenerToDeleteProjectButton(ele, id) {
         if(ele.textContent.replace(/\s+/g, '') == document.getElementById("list-name").textContent.replace(/\s+/g, '')) {
             document.getElementById("home").click();
         }
+
+        updateMyProjectsLocal();
+        updateMyTasksLocal();
         
         
         
@@ -173,6 +177,7 @@ function addEventListenerToRemoveTaskButton(ele, id) {
     ele.addEventListener("click", () => {
         event.stopPropagation();
         removeTask(id);
+        updateMyTasksLocal();
     });
 }
 
@@ -215,6 +220,7 @@ function createTaskEvent() {
         event.stopPropagation();
         if(validateForm() == true) {
             getDataFromTaskFormAndCreateTask();
+            updateMyTasksLocal();
         }
         
         
@@ -232,6 +238,7 @@ function checkBoxEvent(ele, div, div2, id) {
             div2.style.setProperty("text-decoration", "line-through");
             div2.style.setProperty("opacity", 0.3);
             a.checked = true;
+            updateMyTasksLocal();
             
         } else {
             div.style.setProperty("text-decoration", "none");
@@ -239,6 +246,7 @@ function checkBoxEvent(ele, div, div2, id) {
             div2.style.setProperty("text-decoration", "none");
             div2.style.setProperty("opacity", 1);
             a.checked = false;
+            updateMyTasksLocal();
         }
     });
 
@@ -246,12 +254,14 @@ function checkBoxEvent(ele, div, div2, id) {
 
 function sortUP() {
     tasks.sort(function(a,b) {
+        updateMyTasksLocal();
         return b.dateObj - a.dateObj;
     });
 }
 
 function sortDown() {
     tasks.sort(function(a,b) {
+        updateMyTasksLocal();
         return a.dateObj - b.dateObj;
     });
 }
@@ -267,25 +277,27 @@ function sortByDate() {
         if(a == "DOWN") {
             sorter.setAttribute("src", "img/uparrow.png");
             sorter.setAttribute("data-way", "UP");
-            sortUP();
-            removeAllTasks();
-            if(document.getElementById("list-name").textContent == "Home") {
-                displayTasks();
-            } else {
-                displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            }
-            
-            
+            //sortUP();
+           // updateMyTasksLocal();
+          //  removeAllTasks();
+            // if(document.getElementById("list-name").textContent == "Home") {
+            //     displayTasks();
+            // } else {
+            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            // }
+            displayTaskManager();
         } else {
             sorter.setAttribute("src", "img/downarrow.png");
             sorter.setAttribute("data-way", "DOWN");
-            sortDown();
-            removeAllTasks();
-            if(document.getElementById("list-name").textContent == "Home") {
-                displayTasks();
-            } else {
-                displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            }
+            // sortDown();
+            // updateMyTasksLocal();
+            // removeAllTasks();
+            // if(document.getElementById("list-name").textContent == "Home") {
+            //     displayTasks();
+            // } else {
+            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
+            // }
+            displayTaskManager();
             
         }
         
