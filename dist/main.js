@@ -234,6 +234,7 @@ function editTask(id) {
     form.setAttribute("onsubmit", "return false");
     
     const textareaTitle = document.createElement("textarea");
+    
     textareaTitle.setAttribute("class", "task-title-textarea");
     textareaTitle.setAttribute("id", "titleOfTask");
     textareaTitle.setAttribute("placeholder", "...");
@@ -706,7 +707,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "checkBoxEvent": () => (/* binding */ checkBoxEvent),
 /* harmony export */   "sortByDate": () => (/* binding */ sortByDate),
 /* harmony export */   "sortUP": () => (/* binding */ sortUP),
-/* harmony export */   "sortDown": () => (/* binding */ sortDown)
+/* harmony export */   "sortDown": () => (/* binding */ sortDown),
+/* harmony export */   "dropDownEvent": () => (/* binding */ dropDownEvent)
 /* harmony export */ });
 /* harmony import */ var _domMani__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
@@ -989,30 +991,32 @@ function sortByDate() {
         if(a == "DOWN") {
             sorter.setAttribute("src", "img/uparrow.png");
             sorter.setAttribute("data-way", "UP");
-            //sortUP();
-           // updateMyTasksLocal();
-          //  removeAllTasks();
-            // if(document.getElementById("list-name").textContent == "Home") {
-            //     displayTasks();
-            // } else {
-            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            // }
             (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTaskManager)();
         } else {
             sorter.setAttribute("src", "img/downarrow.png");
             sorter.setAttribute("data-way", "DOWN");
-            // sortDown();
-            // updateMyTasksLocal();
-            // removeAllTasks();
-            // if(document.getElementById("list-name").textContent == "Home") {
-            //     displayTasks();
-            // } else {
-            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            // }
             (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTaskManager)();
-            
         }
         
+    });
+}
+
+function dropDownEvent() {
+    const button = document.getElementById("drop-down");
+
+    button.addEventListener("click", () => {
+        let ele = document.getElementById("side-bar");
+        if(ele.style.visibility == "hidden") {
+            ele.style.visibility = "visible";
+            ele.style.height = "100%";
+            ele.style.paddingTop = "20px";
+        } else {
+            ele.style.visibility = "hidden";
+            ele.style.height = "0px";
+            ele.style.paddingTop = "0px";
+        }
+
+
     });
 }
 
@@ -4105,7 +4109,6 @@ __webpack_require__.r(__webpack_exports__);
 
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.sortByDate)();
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.sortDown)();
-//removeAllTasks();
 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayProjects)();
 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.createAddProjectButtona)();
 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
@@ -4114,7 +4117,7 @@ __webpack_require__.r(__webpack_exports__);
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.tabSwitchEvent)();
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.cancelAddingProject)();
 (0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.addTaskButton)();
-
+(0,_eventlis__WEBPACK_IMPORTED_MODULE_1__.dropDownEvent)();
 
 })();
 

@@ -277,33 +277,35 @@ function sortByDate() {
         if(a == "DOWN") {
             sorter.setAttribute("src", "img/uparrow.png");
             sorter.setAttribute("data-way", "UP");
-            //sortUP();
-           // updateMyTasksLocal();
-          //  removeAllTasks();
-            // if(document.getElementById("list-name").textContent == "Home") {
-            //     displayTasks();
-            // } else {
-            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            // }
             displayTaskManager();
         } else {
             sorter.setAttribute("src", "img/downarrow.png");
             sorter.setAttribute("data-way", "DOWN");
-            // sortDown();
-            // updateMyTasksLocal();
-            // removeAllTasks();
-            // if(document.getElementById("list-name").textContent == "Home") {
-            //     displayTasks();
-            // } else {
-            //     displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
-            // }
             displayTaskManager();
-            
         }
         
     });
 }
 
+function dropDownEvent() {
+    const button = document.getElementById("drop-down");
+
+    button.addEventListener("click", () => {
+        let ele = document.getElementById("side-bar");
+        if(ele.style.visibility == "hidden") {
+            ele.style.visibility = "visible";
+            ele.style.height = "100%";
+            ele.style.paddingTop = "20px";
+        } else {
+            ele.style.visibility = "hidden";
+            ele.style.height = "0px";
+            ele.style.paddingTop = "0px";
+        }
+
+
+    });
+}
+
 
 export {tabSwitchEvent, addProjectEvent, addProjectToList, cancelAddingProject, addEventListenerToProjectButton, addEventListenerToDeleteProjectButton, addTaskButton, cancelAddTaskButton, randomNumber, setIdForProject, setIdForTask, addEventListenerToEditTaskButton,
-addEventListenerToRemoveTaskButton, checkBoxEvent, sortByDate, sortUP, sortDown};
+addEventListenerToRemoveTaskButton, checkBoxEvent, sortByDate, sortUP, sortDown,dropDownEvent};

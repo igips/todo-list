@@ -1,9 +1,8 @@
 import { createAddProjectButtona, createProjectButton, displayProjects, displayTasks, removeAllTasks } from "./domMani";
-import { addProjectEvent, addProjectToList,  addTaskButton, cancelAddingProject, sortByDate, sortDown, tabSwitchEvent } from "./eventlis";
+import { addProjectEvent, addProjectToList,  addTaskButton, cancelAddingProject, dropDownEvent, sortByDate, sortDown, tabSwitchEvent } from "./eventlis";
 
 sortByDate();
 sortDown();
-//removeAllTasks();
 displayProjects();
 createAddProjectButtona();
 displayTasks();
@@ -12,4 +11,4 @@ addProjectToList();
 tabSwitchEvent();
 cancelAddingProject();
 addTaskButton();
-
+dropDownEvent();

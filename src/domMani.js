@@ -193,6 +193,7 @@ function editTask(id) {
     form.setAttribute("onsubmit", "return false");
     
     const textareaTitle = document.createElement("textarea");
+    
     textareaTitle.setAttribute("class", "task-title-textarea");
     textareaTitle.setAttribute("id", "titleOfTask");
     textareaTitle.setAttribute("placeholder", "...");
