@@ -1003,19 +1003,15 @@ function sortByDate() {
 
 function dropDownEvent() {
     const button = document.getElementById("drop-down");
+    let ele = document.getElementById("side-bar");
+    
 
     button.addEventListener("click", () => {
-        let ele = document.getElementById("side-bar");
-        if(ele.style.visibility == "hidden") {
-            ele.style.visibility = "visible";
-            ele.style.height = "100%";
-            ele.style.paddingTop = "20px";
+        if(!ele.classList.contains("active")) {
+            ele.classList.add("active");
         } else {
-            ele.style.visibility = "hidden";
-            ele.style.height = "0px";
-            ele.style.paddingTop = "0px";
+            ele.classList.remove("active");
         }
-
 
     });
 }
