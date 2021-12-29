@@ -1,23 +1,12 @@
+html {
+    min-height: 100%;
+    position: relative;
+}
+
 body {
-    height: 100vh;
     margin: 0px;
-}
-
-#content {
-    display: flex;
-    flex-direction: column;
-
-}
-
-#footer {
-    background-color: #f0ffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    font-size: 15px;
-    width: 100%;
-    height: 40px;
+    display: block;
+    
 }
 
 #footer i {
@@ -39,26 +28,36 @@ body {
     padding-right: 15px;
     height: 0px;
     visibility: hidden;
-    
 }
 
 
 
 #middle {
-   display: flex;
-    
-    
+    min-height: calc(100vh - 104px - 25px);
+    display: flex;
+   
 }
 
-#side-bar {
+/* #side-bar {
     min-width: 300px;
-    height: 100vh;
     background-color: #FFF0F0;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
     gap: 10px;
+    
+} */
+
+.side-bar {
+    min-width: 300px;
+    background-color: #FFF0F0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    gap: 10px;
+    
 }
 
 #list-ico {
@@ -151,6 +150,7 @@ button:hover {
     flex-direction: column;
     gap: 10px;
     visibility: hidden;
+    margin-bottom: 10px;
 }
 
 .nav-buttons:hover, .button-project:hover, #add-project:hover {
@@ -173,12 +173,11 @@ h2 {
     display: flex;
     justify-content: center;
     padding-top: 22px;
+    
 }
 
 #list {
     width: 780px;
-    height: 90%;
-    /* border: solid 1px black; */
     display: flex;
     flex-direction: column;
     font-family: "Moo Lah Lah";
@@ -204,6 +203,7 @@ h2 {
     margin-top: 10px;
     font-size: 18px;
     width: 100px;
+    margin-bottom: 10px;
 }
 
 #add-task img {
@@ -350,17 +350,42 @@ textarea {
     gap: 10px;
 }
 
+#footer {
+    background-color: #f0ffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 15px;
+    width: 100%;
+    height: 40px;
+   
+    /* position: relative;
+    bottom: 0; */
+
+}
+
 @media (max-width: 650px) {
     #middle {
         flex-direction: column;
+        background-color: #F8FFF0;
+
     }
 
-    #side-bar {
+    /* #side-bar {
+        display: none;
         align-items: flex-start;
-        height: 0px;
-        padding-top: 0px;
-        visibility: hidden;
         
+    } */
+
+    .side-bar {
+        display: none;
+        align-items: flex-start;
+        
+    }
+
+    .active {
+        display: flex;
     }
 
     h2 {
@@ -425,6 +450,10 @@ textarea {
     #drop-down {
         height: 40px;
         visibility: visible;
+    }
+
+    .button-project .del-project {
+        display: block;
     }
 
     
