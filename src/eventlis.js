@@ -13,10 +13,12 @@ function tabSwitchEvent() {
                 displayTasks();
                 document.getElementById("add-task").style.visibility = "visible";
             } else if (document.getElementById("list-name").textContent == "Today") {
+                document.getElementById("tasks").textContent = "";
                 removeAllTasks();
                 displayTodayTasks();
                 document.getElementById("add-task").style.visibility = "hidden";
             } else if (document.getElementById("list-name").textContent == "This Week") {
+                document.getElementById("tasks").textContent = "";
                 removeAllTasks();
                 displayThisWeekTasks();
                 document.getElementById("add-task").style.visibility = "hidden";
@@ -52,7 +54,7 @@ function addProjectToList() {
         displayProjects();
         createAddProjectButton();
         updateMyProjectsLocal();
-
+        
         document.getElementById(project.id).click();
     });
 }

@@ -36,7 +36,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createAddProjectButtona": () => (/* binding */ createAddProjectButtona)
 /* harmony export */ });
 /* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(37);
 /* harmony import */ var _eventlis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
 
@@ -280,6 +280,7 @@ function editTask(id) {
     inputProjectName.setAttribute("placeholder", "Project Name");
     inputProjectName.setAttribute("type", "text");
     inputProjectName.setAttribute("id", "projectNameValue");
+    inputProjectName.setAttribute("maxlength", "25");
     inputProjectName.setAttribute("class", "set-project-name");
     inputProjectName.value = taskFromList.project;
     secondContainer.appendChild(inputProjectName);
@@ -315,6 +316,15 @@ function editTask(id) {
         }
        
         taskFromList.project = inputProjectName.value;
+        if(checkIfProjectsContainProject(taskFromList.project) == false) {
+            const aaaa = (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.Project)(taskFromList.project, (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.setIdForProject)());
+            _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.projects.push(aaaa);
+            removeAddProjectButton();
+            displayProjects();
+            createAddProjectButton();
+            (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyProjectsLocal)();
+
+        }
         if(validateForm() == true) {
             completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
             displayTaskManager();
@@ -407,6 +417,7 @@ function createTaskEditor() {
         inputProjectName.setAttribute("placeholder", "Project Name");
         inputProjectName.setAttribute("type", "text");
         inputProjectName.setAttribute("id", "projectNameValue");
+        inputProjectName.setAttribute("maxlength", "25");
         inputProjectName.setAttribute("class", "set-project-name");
         secondContainer.appendChild(inputProjectName);
     }
@@ -516,6 +527,18 @@ function clearForm() {
     
 }
 
+function checkIfProjectsContainProject(projectName) {
+    let contains = false;
+
+    for(let i = 0; i < _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.projects.length; i++) {
+        if(_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.projects[i].title.toLowerCase() == projectName.toLowerCase()) {
+            contains = true;
+        }
+    }
+
+    return contains;
+}
+
 
 function getDataFromTaskFormAndCreateTask() {
     const title = document.getElementById("titleOfTask").value;
@@ -532,6 +555,15 @@ function getDataFromTaskFormAndCreateTask() {
     let project = "";
     if(document.getElementById("list-name").textContent == "Home") {
         project = document.getElementById("projectNameValue").value;
+        if(checkIfProjectsContainProject(project) == false) {
+            const aaaa = (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.Project)(project, (0,_eventlis__WEBPACK_IMPORTED_MODULE_0__.setIdForProject)());
+            _projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.projects.push(aaaa);
+            removeAddProjectButton();
+            displayProjects();
+            createAddProjectButton();
+            (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyProjectsLocal)();
+
+        }
     } else if (document.getElementById("list-name").textContent != "Home") {
         project = document.getElementById("list-name").textContent.replace(/\s+/g, '');
     }
@@ -727,10 +759,12 @@ function tabSwitchEvent() {
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTasks)();
                 document.getElementById("add-task").style.visibility = "visible";
             } else if (document.getElementById("list-name").textContent == "Today") {
+                document.getElementById("tasks").textContent = "";
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayTodayTasks)();
                 document.getElementById("add-task").style.visibility = "hidden";
             } else if (document.getElementById("list-name").textContent == "This Week") {
+                document.getElementById("tasks").textContent = "";
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.removeAllTasks)();
                 (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayThisWeekTasks)();
                 document.getElementById("add-task").style.visibility = "hidden";
@@ -766,7 +800,7 @@ function addProjectToList() {
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.displayProjects)();
         (0,_domMani__WEBPACK_IMPORTED_MODULE_0__.createAddProjectButton)();
         (0,_projectsandtasks__WEBPACK_IMPORTED_MODULE_1__.updateMyProjectsLocal)();
-
+        
         document.getElementById(project.id).click();
     });
 }
@@ -3921,20 +3955,7 @@ function throwProtectedError(token, format, input) {
 }
 
 /***/ }),
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */
+/* 37 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -3942,7 +3963,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ differenceInCalendarDays)
 /* harmony export */ });
 /* harmony import */ var _lib_getTimezoneOffsetInMilliseconds_index_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(20);
-/* harmony import */ var _startOfDay_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(51);
+/* harmony import */ var _startOfDay_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
 /* harmony import */ var _lib_requiredArgs_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 
 
@@ -3996,7 +4017,7 @@ function differenceInCalendarDays(dirtyDateLeft, dirtyDateRight) {
 }
 
 /***/ }),
-/* 51 */
+/* 38 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);

@@ -1,6 +1,6 @@
 import { differenceInCalendarDays, format, formatDistance, parseISO } from "date-fns";
-import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent, sortDown, sortUP } from "./eventlis";
-import { projects, Task, tasks, updateMyTasksLocal } from "./projectsandtasks";
+import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent, sortDown, sortUP, setIdForProject } from "./eventlis";
+import { projects, Task, tasks, updateMyProjectsLocal, updateMyTasksLocal,Project } from "./projectsandtasks";
 
 
 
@@ -239,6 +239,7 @@ function editTask(id) {
     inputProjectName.setAttribute("placeholder", "Project Name");
     inputProjectName.setAttribute("type", "text");
     inputProjectName.setAttribute("id", "projectNameValue");
+    inputProjectName.setAttribute("maxlength", "25");
     inputProjectName.setAttribute("class", "set-project-name");
     inputProjectName.value = taskFromList.project;
     secondContainer.appendChild(inputProjectName);
@@ -274,6 +275,15 @@ function editTask(id) {
         }
        
         taskFromList.project = inputProjectName.value;
+        if(checkIfProjectsContainProject(taskFromList.project) == false) {
+            const aaaa = Project(taskFromList.project, setIdForProject());
+            projects.push(aaaa);
+            removeAddProjectButton();
+            displayProjects();
+            createAddProjectButton();
+            updateMyProjectsLocal();
+
+        }
         if(validateForm() == true) {
             completeEditingTask(id, taskFromList.name, taskFromList.date, ele); 
             displayTaskManager();
@@ -366,6 +376,7 @@ function createTaskEditor() {
         inputProjectName.setAttribute("placeholder", "Project Name");
         inputProjectName.setAttribute("type", "text");
         inputProjectName.setAttribute("id", "projectNameValue");
+        inputProjectName.setAttribute("maxlength", "25");
         inputProjectName.setAttribute("class", "set-project-name");
         secondContainer.appendChild(inputProjectName);
     }
@@ -475,6 +486,18 @@ function clearForm() {
     
 }
 
+function checkIfProjectsContainProject(projectName) {
+    let contains = false;
+
+    for(let i = 0; i < projects.length; i++) {
+        if(projects[i].title.toLowerCase() == projectName.toLowerCase()) {
+            contains = true;
+        }
+    }
+
+    return contains;
+}
+
 
 function getDataFromTaskFormAndCreateTask() {
     const title = document.getElementById("titleOfTask").value;
@@ -491,6 +514,15 @@ function getDataFromTaskFormAndCreateTask() {
     let project = "";
     if(document.getElementById("list-name").textContent == "Home") {
         project = document.getElementById("projectNameValue").value;
+        if(checkIfProjectsContainProject(project) == false) {
+            const aaaa = Project(project, setIdForProject());
+            projects.push(aaaa);
+            removeAddProjectButton();
+            displayProjects();
+            createAddProjectButton();
+            updateMyProjectsLocal();
+
+        }
     } else if (document.getElementById("list-name").textContent != "Home") {
         project = document.getElementById("list-name").textContent.replace(/\s+/g, '');
     }
