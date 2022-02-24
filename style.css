@@ -1,11 +1,18 @@
+* {
+    margin: 0px;
+}
+
 html {
-    min-height: 100%;
+    height: 100%;
     position: relative;
 }
 
 body {
     margin: 0px;
-    display: block;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    
     
 }
 
@@ -14,14 +21,59 @@ body {
     color: black;
 }
 
+.lower-P {
+     margin-top: 5px;
+}
+
+.login-reg-but {
+    margin-top: 5px;
+}
+
 
 #top {
+    background-color: #f0ffff;
+    
+    display: flex;
+    align-items: center;
+}
+
+#left {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+#logo-div {
     font-family: "Rock 3D";
     display: flex;
     align-items: center;
-    gap: 10px;
-    background-color: #f0ffff;
+    justify-content: center;
+
 }
+
+#login-div {
+    padding-left: 15px;
+    padding-bottom: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+#login:hover {
+    color: red;
+    cursor: pointer;
+}
+
+#register:hover {
+    color: red;
+    cursor: pointer;
+}
+
+#sign-out-span:hover {
+    color: red;
+    cursor: pointer;
+}
+
+
 
 #drop-down {
     margin-left: auto;
@@ -30,13 +82,22 @@ body {
     visibility: hidden;
 }
 
+#sign-out-div {
+    padding-left: 15px;
+    display: flex;
+    gap: 5px;
+    padding-bottom: 5px;
+}
+
 
 
 #middle {
     min-height: calc(100vh - 104px - 25px);
     display: flex;
+    flex: 1;
    
 }
+
 
 
 
@@ -53,7 +114,7 @@ body {
 
 #list-ico {
     height: 32px;
-    margin-left: 30px;
+    margin-left: 15px;
 }
 
 .nav-buttons, .button-project, #add-project { 
@@ -136,6 +197,21 @@ body {
 button:hover {
     cursor: pointer;
 }
+
+#log-form {
+    margin-bottom: 10px;
+}
+
+
+#reg-info {
+    font-size: 11px;
+    cursor: pointer;
+}
+
+#reg-info:hover {
+    color: red;
+    
+} 
 
 #project-input {
     display: flex;
@@ -356,6 +432,43 @@ textarea {
     bottom: 0; */
 
 }
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    background-color: #F8FFF0;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 250px; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
 
 @media (max-width: 650px) {
     #middle {
