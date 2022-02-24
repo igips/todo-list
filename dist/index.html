@@ -15,12 +15,19 @@
 </head>
 <body>
     
-        
-
         <div id="top">
-            <img src="img/list.png" alt="" id="list-ico"> <h1>To-Do List</h1> 
-            <img src="img/menu.png" alt="" id="drop-down">
-
+            <div id="left">
+                <div id="logo-div">
+                    <img src="img/list.png" alt="" id="list-ico"> 
+                    <h1>To-Do List</h1> 
+                    <img src="img/menu.png" alt="" id="drop-down">
+                </div>
+                <div id="login-div"><span id="login">Login</span>|<span id="register">Register</span></div>
+                <div id="sign-out-div"><span id="user-name-span"></span><div id="sign-out-span"></div></div>
+                
+                
+            </div>
+           
         </div>
 
         <div id="middle">
@@ -73,6 +80,34 @@
             </div>
             
 
+        </div>
+        <div id="loginModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+               
+                
+              <span class="close">&times;</span>
+              <form  id="log-form" onsubmit="return false" >
+                <p>Email:</p> <input required id="login-email" type="email"> <br>
+                <p class="lower-P">Password:</p> <input minlength="6" required id="login-pas" type="password"> <br>
+                <button type="submit" class="login-reg-but" id="login-but">Login</button>
+              </form>
+              <span id="reg-info">Don't have an account? Register here!</span>
+              
+            </div>
+        </div>
+        <div id="regModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+            <form id="reg-form" onsubmit="return false">
+              <p>Email:</p> <input required id="reg-email" type="email"> <br>
+              <p class="lower-P">Password:</p> <input minlength="6" required id="reg-pas" type="password"> <br>
+              <p class="lower-P">Repeat Password:</p> <input minlength="6" required id="reg-rep-pas" type="password"> <br>
+              <button type="submit"  class="login-reg-but" id="reg-butt">Register</button>
+            </form>
+              
+            </div>
         </div>
 
        
