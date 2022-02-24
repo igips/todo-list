@@ -1,6 +1,8 @@
 import { differenceInCalendarDays, format, formatDistance, parseISO } from "date-fns";
-import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent, sortDown, sortUP, setIdForProject } from "./eventlis";
+import { addEventListenerToProjectButton, addProjectEvent, addEventListenerToDeleteProjectButton, cancelAddTaskButton, setIdForTask, addEventListenerToEditTaskButton, addEventListenerToRemoveTaskButton, checkBoxEvent, sortDown, sortUP, setIdForProject, addTaskToCloud, addProjectToCloud } from "./eventlis";
 import { projects, Task, tasks, updateMyProjectsLocal, updateMyTasksLocal,Project } from "./projectsandtasks";
+import { userID } from "./index.js";
+
 
 
 
@@ -139,6 +141,8 @@ function removeProject(id) {
 
 }
 
+
+
 function removeAllTasks() {
     let task = document.getElementsByClassName("task");
     while(task[0]) {
@@ -275,13 +279,14 @@ function editTask(id) {
         }
        
         taskFromList.project = inputProjectName.value;
-        if(checkIfProjectsContainProject(taskFromList.project) == false) {
+        if(checkIfProjectsContainProject(taskFromList.project) == false && taskFromList.project !== "") {
             const aaaa = Project(taskFromList.project, setIdForProject());
             projects.push(aaaa);
             removeAddProjectButton();
             displayProjects();
             createAddProjectButton();
-            updateMyProjectsLocal();
+            addProjectToCloud(userID);
+            // updateMyProjectsLocal();
 
         }
         if(validateForm() == true) {
@@ -289,8 +294,8 @@ function editTask(id) {
             displayTaskManager();
             
         }
-
-        updateMyTasksLocal();
+        addTaskToCloud(userID);
+        // updateMyTasksLocal();
         
         
         
@@ -323,7 +328,8 @@ function displayTaskManager() {
     } else {
         displayTasksInProject(document.getElementById("list-name").textContent.replace(/\s+/g, ''));
     }
-    updateMyTasksLocal();
+    addTaskToCloud(userID);
+    // updateMyTasksLocal();
 }
 
 function completeEditingTask(id, name, date, ele) {
@@ -514,13 +520,14 @@ function getDataFromTaskFormAndCreateTask() {
     let project = "";
     if(document.getElementById("list-name").textContent == "Home") {
         project = document.getElementById("projectNameValue").value;
-        if(checkIfProjectsContainProject(project) == false) {
+        if(checkIfProjectsContainProject(project) == false && project !== "") {
             const aaaa = Project(project, setIdForProject());
             projects.push(aaaa);
             removeAddProjectButton();
             displayProjects();
             createAddProjectButton();
-            updateMyProjectsLocal();
+            addProjectToCloud(userID);
+            // updateMyProjectsLocal();
 
         }
     } else if (document.getElementById("list-name").textContent != "Home") {
