@@ -475,7 +475,10 @@ textarea {
     #middle {
         flex-direction: column;
         background-color: #F8FFF0;
+    }
 
+    #main-div {
+        max-width: 100%;
     }
 
     /* #side-bar {
