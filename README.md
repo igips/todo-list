@@ -1,6 +1,6 @@
 # Todo List
 
-Todo list app created with HTML, CSS, JS and FIREBASE.
+Todo list app made with HTML, CSS, JS and FIREBASE.
 
 [Live Demo](https://igips.github.io/todo-list/) :point_left:
 
