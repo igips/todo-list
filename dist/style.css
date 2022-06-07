@@ -31,8 +31,9 @@ body {
 
 
 #top {
-    background-color: #f0ffff;
-    
+    /* background-color: #f0ffff; */
+    background-color: #db4c3f;
+    color: white;
     display: flex;
     align-items: center;
 }
@@ -58,17 +59,20 @@ body {
 }
 
 #login:hover {
-    color: red;
+    /* color: red; */
+    color: black;
     cursor: pointer;
 }
 
 #register:hover {
-    color: red;
+    /* color: red; */
+    color: black;
     cursor: pointer;
 }
 
 #sign-out-span:hover {
-    color: red;
+    /* color: red; */
+    color: black;
     cursor: pointer;
 }
 
@@ -102,7 +106,8 @@ body {
 
 .side-bar {
     min-width: 300px;
-    background-color: #FFF0F0;
+    /* background-color: #FFF0F0; */
+    background-color: #f7f7f7;;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -120,7 +125,8 @@ body {
     width: 250px;
     min-height: 40px;
     border: none;
-    background-color: #FFF0F0;
+    /* background-color: #FFF0F0; */
+    background-color: #f7f7f7;
     font-size: 18px;
     cursor: pointer;
     display: flex;
@@ -233,7 +239,7 @@ h2 {
 }
 
 #main-div {
-    background-color: #F8FFF0;
+    /* background-color: #F8FFF0; */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -410,7 +416,8 @@ textarea {
 }
 
 #footer {
-    background-color: #f0ffff;
+    /* background-color: #f0ffff; */
+    background-color: #db4c3f;
     display: flex;
     justify-content: center;
     align-items: center;
